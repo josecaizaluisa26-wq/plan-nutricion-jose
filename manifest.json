@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#16a34a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi Plan">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>Plan Nutricional · José</title>
+<style>
+:root {
+  --bg: #f8fafc;
+  --bg2: #f1f5f9;
+  --bg3: #e2e8f0;
+  --card: #ffffff;
+  --green: #16a34a;
+  --green-light: #dcfce7;
+  --green-text: #14532d;
+  --blue: #2563eb;
+  --blue-light: #dbeafe;
+  --blue-text: #1e3a8a;
+  --yellow: #d97706;
+  --yellow-light: #fef3c7;
+  --yellow-text: #92400e;
+  --red: #dc2626;
+  --red-light: #fee2e2;
+  --red-text: #7f1d1d;
+  --purple: #7c3aed;
+  --purple-light: #ede9fe;
+  --purple-text: #4c1d95;
+  --text: #0f172a;
+  --text2: #475569;
+  --text3: #94a3b8;
+  --border: #e2e8f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow: hidden; }
+.app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+
+/* HEADER */
+.header { background: #fff; border-bottom: 1px solid var(--border); padding: 12px 16px 0; flex-shrink: 0; padding-top: max(12px, env(safe-area-inset-top)); box-shadow: var(--shadow); }
+.header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #16a34a, #22c55e); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.logo-title { font-size: 17px; font-weight: 800; color: var(--text); line-height: 1.1; }
+.logo-sub { font-size: 11px; color: var(--text3); }
+
+/* EXAM PILLS */
+.exam-row { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+.exam-pill { display: flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 600; }
+.pill-green { background: var(--green-light); color: var(--green-text); }
+.pill-yellow { background: var(--yellow-light); color: var(--yellow-text); }
+.pill-red { background: var(--red-light); color: var(--red-text); }
+
+.nav { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
+.nav::-webkit-scrollbar { display: none; }
+.nav-btn { flex-shrink: 0; padding: 9px 13px; font-size: 12px; font-weight: 500; border: none; cursor: pointer; background: transparent; color: var(--text3); border-bottom: 2.5px solid transparent; transition: all 0.15s; white-space: nowrap; }
+.nav-btn.active { color: var(--green); border-bottom-color: var(--green); font-weight: 700; }
+
+.content { flex: 1; overflow-y: auto; padding: 16px; padding-bottom: max(20px, env(safe-area-inset-bottom)); background: var(--bg); }
+.page { display: none; }
+.page.active { display: block; }
+
+.card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+
+.metric-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px; }
+.metric { background: var(--card); border-radius: var(--radius-sm); padding: 11px 8px; text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.metric-val { font-size: 19px; font-weight: 800; line-height: 1; }
+.metric-val.green { color: var(--green); }
+.metric-val.yellow { color: var(--yellow); }
+.metric-val.red { color: var(--red); }
+.metric-lbl { font-size: 10px; color: var(--text3); margin-top: 3px; line-height: 1.3; }
+.metric-change { font-size: 10px; margin-top: 2px; font-weight: 600; }
+
+.meal { padding: 11px 0; border-bottom: 1px solid var(--border); }
+.meal:last-child { border-bottom: none; padding-bottom: 0; }
+.meal-time { font-size: 11px; font-weight: 700; color: var(--green); margin-bottom: 3px; letter-spacing: 0.02em; }
+.meal-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.meal-desc { font-size: 12.5px; color: var(--text2); line-height: 1.7; }
+.meal-desc strong { color: var(--text); font-weight: 600; }
+
+.box { border-radius: var(--radius-sm); padding: 10px 13px; margin-bottom: 10px; font-size: 13px; line-height: 1.6; font-weight: 500; }
+.box-red { background: var(--red-light); color: var(--red-text); }
+.box-green { background: var(--green-light); color: var(--green-text); }
+.box-yellow { background: var(--yellow-light); color: var(--yellow-text); }
+.box-blue { background: var(--blue-light); color: var(--blue-text); }
+.box-purple { background: var(--purple-light); color: var(--purple-text); }
+
+.badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 12px; }
+.badge-run { background: var(--green-light); color: var(--green-text); }
+.badge-bike { background: var(--blue-light); color: var(--blue-text); }
+.badge-fartlek { background: var(--yellow-light); color: var(--yellow-text); }
+
+.day-card { background: var(--card); border-radius: var(--radius); margin-bottom: 10px; box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; }
+.day-hdr { padding: 13px 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; -webkit-user-select: none; user-select: none; }
+.day-left { display: flex; flex-direction: column; gap: 5px; }
+.day-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.day-chevron { font-size: 13px; color: var(--text3); transition: transform 0.2s; font-weight: 700; }
+.day-card.open .day-chevron { transform: rotate(180deg); }
+.day-body { display: none; padding: 4px 16px 14px; border-top: 1px solid var(--border); }
+.day-card.open .day-body { display: block; }
+
+.change { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+.change:last-child { border-bottom: none; }
+.change-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+.change-body { font-size: 13px; color: var(--text2); line-height: 1.6; }
+.change-body strong { color: var(--text); font-weight: 700; display: block; margin-bottom: 2px; }
+
+.food-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.food-table th { text-align: left; color: var(--text3); font-weight: 700; padding: 7px 6px; border-bottom: 2px solid var(--border); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+.food-table td { padding: 8px 6px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; line-height: 1.5; }
+.food-table tr:last-child td { border-bottom: none; }
+.food-table td:first-child { font-weight: 700; color: var(--green); min-width: 80px; font-size: 11px; }
+
+.chips { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.chip { padding: 9px 10px; border-radius: var(--radius-sm); font-size: 12px; line-height: 1.4; font-weight: 500; }
+.chip-red { background: var(--red-light); color: var(--red-text); }
+.chip-green { background: var(--green-light); color: var(--green-text); }
+.chip-yellow { background: var(--yellow-light); color: var(--yellow-text); }
+
+.tip { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.tip:last-child { border-bottom: none; }
+.tip-n { font-size: 13px; font-weight: 800; color: var(--green); min-width: 22px; }
+.tip-text { font-size: 13px; color: var(--text2); line-height: 1.6; }
+.tip-text strong { color: var(--text); font-weight: 600; }
+
+.detox-hero { background: linear-gradient(135deg, #d1fae5, #a7f3d0); border: 1px solid #6ee7b7; border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+.detox-hero h2 { font-size: 16px; font-weight: 800; color: var(--green-text); margin-bottom: 4px; }
+.detox-hero p { font-size: 13px; color: #065f46; line-height: 1.6; }
+
+.licuado-hero { background: linear-gradient(135deg, #ede9fe, #ddd6fe); border: 1px solid #c4b5fd; border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+.licuado-hero h2 { font-size: 16px; font-weight: 800; color: var(--purple-text); margin-bottom: 4px; }
+.licuado-hero p { font-size: 13px; color: #5b21b6; line-height: 1.6; }
+
+.plato { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.plato-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.plato-row:last-child { border-bottom: none; }
+.plato-pct { font-size: 20px; font-weight: 800; color: var(--green); min-width: 40px; }
+.plato-txt { font-size: 13px; color: var(--text2); line-height: 1.5; }
+.plato-txt strong { color: var(--text); display: block; }
+
+ul.plain { list-style: none; padding: 0; }
+ul.plain li { font-size: 13px; color: var(--text2); line-height: 1.9; padding-left: 16px; position: relative; }
+ul.plain li::before { content: '→'; position: absolute; left: 0; color: var(--green); font-size: 11px; top: 3px; font-weight: 700; }
+
+.sec-lbl { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin: 14px 0 8px; }
+
+.step { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+.step:last-child { border-bottom: none; }
+.step-num { display: inline-flex; width: 24px; height: 24px; background: var(--green); color: white; border-radius: 50%; font-size: 12px; font-weight: 800; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-text { font-size: 13px; color: var(--text2); line-height: 1.6; padding-top: 2px; }
+.step-text strong { color: var(--text); font-weight: 600; }
+
+.progress-bar { background: var(--bg3); border-radius: 8px; height: 10px; overflow: hidden; margin: 6px 0; }
+.progress-fill { height: 100%; border-radius: 8px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="header-top">
+      <div class="logo-icon">🥗</div>
+      <div>
+        <div class="logo-title">Plan Nutricional</div>
+        <div class="logo-sub">José · IESS Sangolquí · Jun 2026</div>
+      </div>
+    </div>
+    <div class="exam-row">
+      <div class="exam-pill pill-green">✅ Triglicéridos 88</div>
+      <div class="exam-pill pill-yellow">⚠️ Colesterol 223</div>
+      <div class="exam-pill pill-red">🔴 Glucosa 132</div>
+    </div>
+    <div class="nav">
+      <button class="nav-btn active" onclick="showPage('hoy',this)">Hoy</button>
+      <button class="nav-btn" onclick="showPage('semana',this)">Semana</button>
+      <button class="nav-btn" onclick="showPage('detox',this)">Detox</button>
+      <button class="nav-btn" onclick="showPage('plato',this)">Mi Plato</button>
+      <button class="nav-btn" onclick="showPage('alimentos',this)">Guía</button>
+      <button class="nav-btn" onclick="showPage('reglas',this)">Reglas</button>
+      <button class="nav-btn" onclick="showPage('salud',this)">Salud</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- HOY -->
+    <div id="hoy" class="page active">
+      <div class="metric-row">
+        <div class="metric">
+          <div class="metric-val green">88</div>
+          <div class="metric-lbl">Triglicéridos</div>
+          <div class="metric-change" style="color:var(--green)">✅ Normal</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val yellow">223</div>
+          <div class="metric-lbl">Colesterol</div>
+          <div class="metric-change" style="color:var(--yellow)">⚠️ Alto</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val red">132</div>
+          <div class="metric-lbl">Glucosa</div>
+          <div class="metric-change" style="color:var(--red)">🔴 Alta</div>
+        </div>
+      </div>
+
+      <div class="box box-purple">🏅 ¡Triglicéridos normalizados! Bajaron de alto a 88. El plan está funcionando. Ahora el foco es glucosa y colesterol.</div>
+
+      <div class="card">
+        <div class="card-title">🌙 04:45 — Pre-entreno (NUEVO)</div>
+        <div class="meal">
+          <div class="meal-time">RECOMENDACIÓN NUTRICIONISTA — SIN DÁTIL NI BANANO</div>
+          <div class="meal-title">Manzana verde pequeña</div>
+          <div class="meal-desc">
+            1 manzana verde pequeña (bajo índice glucémico — no dispara glucosa)<br>
+            + agua aromática<br>
+            <strong>¿Por qué manzana verde?</strong> IG bajo (38), fibra que estabiliza glucosa, no eleva insulina antes del ejercicio. Evidencia científica: Dr. David Ludwig (Harvard) recomienda frutas de IG bajo pre-ejercicio en prediabéticos.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">☀️ Desayuno post-entreno</div>
+
+        <div class="box box-blue">☕ <strong>Café:</strong> NO antes de entrenar (04:45) — eleva glucosa por efecto cortisol en ayunas. Tómalo CON o DESPUÉS del desayuno (06:15–07:00), sin azúcar, máximo 1–2 tazas. Evitar después de las 14:00 (afecta el sueño y la glucosa basal).</div>
+
+        <div class="meal">
+          <div class="meal-time">OPCIÓN A — LUNES / MIÉRCOLES / VIERNES</div>
+          <div class="meal-title">Agua aromática + Huevo + 2 claras + Verde majado</div>
+          <div class="meal-desc">
+            Agua aromática al despertar (hábito clave)<br>
+            1 huevo entero + 2 claras (no en preparaciones fritas)<br>
+            Verde majado ½ taza (reemplaza al mote encurtido)<br>
+            ☕ Café negro sin azúcar — con el desayuno<br>
+            <strong>Preparación:</strong> al jugo, estofado, horno o plancha — NUNCA frito
+          </div>
+        </div>
+
+        <div class="meal">
+          <div class="meal-time">OPCIÓN B — MARTES / JUEVES</div>
+          <div class="meal-title">Agua aromática + Ensalada con aguacate + Tortilla de yuca + Huevo + 2 claras</div>
+          <div class="meal-desc">
+            Ensalada con aceite de oliva ½ cdta<br>
+            Aguacate ¼ unidad<br>
+            Tortilla de yuca ½ taza<br>
+            1 huevo + 2 claras<br>
+            ☕ Café negro sin azúcar — con el desayuno
+          </div>
+        </div>
+
+        <div class="meal">
+          <div class="meal-time">OPCIÓN C — NUEVA: Ensalada de melloco y tomate</div>
+          <div class="meal-title">Agua aromática + Ensalada melloco-tomate + Huevo + 2 claras</div>
+          <div class="meal-desc">
+            Melloco cocido ½ taza + tomate en rodajas<br>
+            Aceite de oliva ½ cdta + limón + sal 3–5g + cilantro o perejil<br>
+            1 huevo + 2 claras<br>
+            ☕ Café negro sin azúcar — con el desayuno<br>
+            <strong>Nota:</strong> Si usas esta opción, reduce o elimina el carbohidrato (arroz/quinoa) en el almuerzo de ese día, para no duplicar la carga.
+          </div>
+        </div>
+
+        <div class="meal">
+          <div class="meal-time">OPCIÓN D — NUEVA: Avena + Yogur griego</div>
+          <div class="meal-title">Agua aromática + Hojuelas de avena + Yogur griego + Huevo + 2 claras</div>
+          <div class="meal-desc">
+            3 cdas hojuelas de avena<br>
+            Yogur griego natural sin azúcar 150ml (mejor opción: más proteína, menos carbohidrato que el natural normal)<br>
+            <strong>Si no tienes griego:</strong> yogur natural sin azúcar funciona igual de bien<br>
+            Mezclar avena con el yogur + canela (opcional)<br>
+            1 huevo + 2 claras (aparte)<br>
+            ☕ Café negro sin azúcar — con el desayuno
+          </div>
+        </div>
+
+        <div class="meal">
+          <div class="meal-time">SÁBADO</div>
+          <div class="meal-title">Agua + Verde majado + Aguacate ¾ + Huevo + 2 claras</div>
+          <div class="meal-desc">Desayuno reforzado para bici 2h · ☕ Café negro con el desayuno</div>
+        </div>
+        <div class="meal">
+          <div class="meal-time">DOMINGO</div>
+          <div class="meal-title">Agua aromática + Mango de verde + Aguacate + Huevo + 2 claras</div>
+          <div class="meal-desc">Post-trote largo 1h30 — recuperación completa · ☕ Café negro con el desayuno</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🍎 10:00 — Media mañana</div>
+        <div class="meal">
+          <div class="meal-time">OPCIONES — ROTAR LIBREMENTE DURANTE LA SEMANA</div>
+          <div class="meal-title">Fruta permitida + frutos secos</div>
+          <div class="meal-desc">
+            <strong>Opción 1:</strong> Manzana verde + nueces 4–6 und<br>
+            <strong>Opción 2:</strong> Pera + almendras 4–6 und<br>
+            <strong>Opción 3:</strong> Mandarina pequeña (3 und) + nueces 4–6 und<br>
+            <strong>Opción 4:</strong> Kiwi (1 und) + almendras 4–6 und<br>
+            <strong>Opción 5:</strong> Naranja + nueces 10 und<br>
+            <strong>Opción 6:</strong> Frutilla ½ tz + almendras 4–6 und<br>
+            <strong>Opción 7:</strong> Naranjilla ½ tz + nueces 4–6 und<br>
+            <strong>Opción 8:</strong> Chochos con tomate (sin frutos secos ese día)<br><br>
+            <strong>Frutas permitidas:</strong> claudia, mandarina pequeña (3 und), pera, naranja, manzana verde, kiwi (1 und), naranjilla, frutilla ½ tz, granadilla, tuna, pitajaya<br>
+            <strong>NO usar:</strong> plátano, banano, uvas, melón, sandía, piña (alto contenido de azúcar)
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🍽️ 13:00–13:30 — Almuerzo</div>
+        <div class="meal">
+          <div class="meal-time">ESTRUCTURA DEL PLATO (Dr. Walter Willett — Harvard)</div>
+          <div class="meal-title">50% verduras · 25% proteína · 25% carbohidrato integral</div>
+          <div class="meal-desc">
+            <strong>Orden obligatorio:</strong> verduras → proteína → carbohidrato<br>
+            <strong>Proteína:</strong> Pollo a la plancha 90g / Pescado 90g / Res magra 90g (máx 1x/sem)<br>
+            <strong>Ensalada:</strong> 2 tazas · Tallo de apio, zanahoria, habas, aguacate ¼, aceite oliva<br>
+            <strong>Carbohidrato:</strong> ½ tz arroz / quinoa / lentejas / chochos<br>
+            <strong>Aderezos:</strong> vinagreta, aceite oliva, limón — NUNCA mayonesa ni salsas industriales
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🌆 18:00 — Merienda / Cena</div>
+        <div class="meal">
+          <div class="meal-time">CENA LIGERA — ÚLTIMAS INDICACIONES IESS</div>
+          <div class="meal-title">Ensalada doble + proteína magra</div>
+          <div class="meal-desc">
+            Ensalada con pollo desmenuzado DOBLE<br>
+            O pescado estofado 90g + 2 tazas ensalada<br>
+            O ensalada con pollo doble estofado<br>
+            Agua aromática<br>
+            <strong>Última comida mínimo 2–3h antes de acostarse</strong><br>
+            <strong>Sin carbohidratos refinados en la cena</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">💧 Hidratación</div>
+        <div class="meal-desc" style="line-height:2.1; font-size:13px;">
+          6–8 vasos de agua al día (mínimo)<br>
+          Agua aromática al despertar — hábito #1<br>
+          2 tazas té verde (catequinas reducen LDL)<br>
+          <strong>Endulzar con:</strong> hojas de stevia únicamente<br>
+          ❌ Sin azúcar, panela, miel, jugos industriales, gaseosas
+        </div>
+      </div>
+    </div>
+
+    <!-- SEMANA -->
+    <div id="semana" class="page">
+      <div class="box box-blue" style="margin-bottom:14px;">Menú oficial IESS Sangolquí · Toca cada día para ver el detalle</div>
+
+      <div class="day-card" onclick="togDay(this)">
+        <div class="day-hdr">
+          <div class="day-left"><div class="day-name">Lunes</div><span class="badge badge-run">🏃 Trote 45 min · Z2</span></div>
+          <span class="day-chevron">▾</span>
+        </div>
+        <div class="day-body">
+          <div class="meal"><div class="meal-time">04:45 Pre-entreno</div><div class="meal-desc">Manzana verde pequeña + agua</div></div>
+          <div class="meal"><div class="meal-time">07:00 Desayuno</div><div class="meal-desc">Agua aromática + Huevo + 2 claras + mote encurtido</div></div>
+          <div class="meal"><div class="meal-time">10:00 Media mañana</div><div class="meal-desc">Manzana verde con frutos secos (nueces 4–6 und)</div></div>
+          <div class="meal"><div class="meal-time">13:30 Almuerzo</div><div class="meal-desc">Pollo a la plancha 90g → 2 tazas ensalada (tallo apio + zanahoria + habas) · Aguacate ¼ · Aceite oliva · Agua</div></div>
+          <div class="meal"><div class="meal-time">15:00 Media tarde</div><div class="meal-desc">Chochos con tomate</div></div>
+          <div class="meal"><div class="meal-time">18:00 Merienda</div><div class="meal-desc">Ensalada con pescado desmenuzado DOBLE + Agua aromática</div></div>
+        </div>
+      </div>
+
+      <div class="day-card" onclick="togDay(this)">
+        <div class="day-hdr">
+          <div class="day-left"><div class="day-name">Martes</div><span class="badge badge-bike">🚴 Bicicleta 1h · ~14km</span></div>
+          <span class="day-chevron">▾</span>
+        </div>
+        <div class="day-body">
+          <div class="meal"><div class="meal-time">04:45 Pre-entreno</div><div class="meal-desc">Manzana verde pequeña + agua</div></div>
+          <div class="meal"><div class="meal-time">07:00 Desayuno</div><div class="meal-desc">Agua aromática + Ensalada con aceite oliva ½ cdta + Aguacate ¼ + Tortilla de yuca ½ tz + Huevo + 2 claras</div></div>
+          <div class="meal"><div class="meal-time">10:00 Media mañana</div><div class="meal-desc">Fruta permitida + nueces 4–6 und</div></div>
+          <div class="meal"><div class="meal-time">13:30 Almuerzo</div><div class="meal-desc">Pescado a la plancha 90g → 2 tazas ensalada · zanahoria + habas · Quinoa ½ tz · Agua</div></div>
+          <div class="meal"><div class="meal-time">15:00 Media tarde</div><div class="meal-desc">Fruta permitida + nueces</div></div>
+          <div class="meal"><div class="meal-time">18:00 Merienda</div><div class="meal-desc">Agua aromática + Ensalada con pollo doble estofado</div></div>
+        </div>
+      </div>
+
+      <div class="day-card" onclick="togDay(this)">
+        <div class="day-hdr">
+          <div class="day-left"><div class="day-name">Miércoles</div><span class="badge badge-fartlek">⚡ Fartlek</span></div>
+          <span class="day-chevron">▾</span>
+        </div>
+        <div class="day-body">
+          <div class="box box-yellow" style="margin-top:10px; font-size:12px;">Fartlek = alta intensidad → manzana verde pre-entreno es obligatoria</div>
+          <div class="meal"><div class="meal-time">04:45 Pre-entreno</div><div class="meal-desc">Manzana verde pequeña + agua aromática</div></div>
+          <div class="meal"><div class="meal-time">07:00 Desayuno</div><div class="meal-desc">Agua aromática + Ensalada con aguacate ¾ tz de verde maíz + Huevo + 2 claras</div></div>
+          <div class="meal"><div class="meal-time">10:00 Media mañana</div><div class="meal-desc">Puñado de frutillas + nueces 10 und con fruta</div></div>
+          <div class="meal"><div class="meal-time">13:30 Almuerzo</div><div class="meal-desc">Pollo al horno 90g → 2 tazas ensalada doble · Agua</div></div>
+          <div class="meal"><div class="meal-time">15:00 Media tarde</div><div class="meal-desc">Chochos con tomate</div></div>
+          <div class="meal"><div class="meal-time">18:00 Merienda</div><div class="meal-desc">Ensalada champiñones + aguacate + pollo doble + Agua aromática</div></div>
+        </div>
+      </div>
+
+      <div class="day-card" onclick="togDay(this)">
+        <div class="day-hdr">
+          <div class="day-left"><div class="day-name">Jueves</div><span class="badge badge-bike">🚴 Bicicleta 1h · ~14km</span></div>
+          <span class="day-chevron">▾</span>
+        </div>
+        <div class="day-body">
+          <div class="meal"><div class="meal-time">04:45 Pre-entreno</div><div class="meal-desc">Manzana verde pequeña + agua</div></div>
+          <div class="meal"><div class="meal-time">07:00 Desayuno</div><div class="meal-desc">Agua aromática + Fruta 3 und + Hojuelas de avena ½ tz + Yogur + Huevo + 2 claras</div></div>
+          <div class="meal"><div class="meal-time">10:00 Media mañana</div><div class="meal-desc">Nueces 10 und con fruta permitida</div></div>
+          <div class="meal"><div class="meal-time">13:30 Almuerzo</div><div class="meal-desc">Pescado al jugo 90g → 2 tazas ensalada doble · Agua</div></div>
+          <div class="meal"><div class="meal-time">15:00 Media tarde</div><div class="meal-desc">Fruta + almendras 4–6 und</div></div>
+          <div class="meal"><div class="meal-time">18:00 Merienda</div><div class="meal-desc">Ensalada + pollo DOBLE + Agua aromática</div></div>
+        </div>
+      </div>
+
+      <div class="day-card" onclick="togDay(this)">
+        <div class="day-hdr">
+          <div class="day-left"><div class="day-name">Viernes</div><span class="badge badge-run">🏃 Trote 45 min · Z2</span></div>
+          <span class="day-chevron">▾</span>
+        </div>
+        <div class="day-body">
+          <div class="meal"><div class="meal-time">04:45 Pre-entreno</div><div class="meal-desc">Manzana verde pequeña + agua</div></div>
+          <div class="meal"><div class="meal-time">07:00 Desayuno</div><div class="meal-desc">Agua aromática + Ensalada con zanahoria + Huevo duro o en blanca + Tortilla + 1 clara + Zanahoria</div></div>
+          <div class="meal"><div class="meal-time">10:00 Media mañana</div><div class="meal-desc">Almendras 4–6 und + fruta permitida</div></div>
+          <div class="meal"><div class="meal-time">13:30 Almuerzo</div><div class="meal-desc">Pollo al vapor 90g → 2 tazas ensalada doble · frutas + nueces · Agua</div></div>
+          <div class="meal"><div class="meal-time">15:00 Media tarde</div><div class="meal-desc">Almendras 4–6 und + fruta</div></div>
+          <div class="meal"><div class="meal-time">18:00 Merienda</div><div class="meal-desc">Ensalada + pollo doble + Agua aromática</div></div>
+        </div>
+      </div>
+
+      <div class="day-card" onclick="togDay(this)">
+        <div class="day-hdr">
+          <div class="day-left"><div class="day-name">Sábado</div><span class="badge badge-bike">🚴 Bici 2h · +300 kcal</span></div>
+          <span class="day-chevron">▾</span>
+        </div>
+        <div class="day-body">
+          <div class="box box-yellow" style="margin-top:10px; font-size:12px;">Sesión larga — desayuno más completo · Ver pestaña Detox si estás en protocolo</div>
+          <div class="meal"><div class="meal-time">Antes de salir</div><div class="meal-desc">Manzana verde + agua (obligatorio para 2h de bici)</div></div>
+          <div class="meal"><div class="meal-time">Desayuno</div><div class="meal-desc">Agua aromática + Mote encurtido + Aguacate ¾ + Huevo + 2 claras</div></div>
+          <div class="meal"><div class="meal-time">En ruta (cada 50 min)</div><div class="meal-desc">Manzana verde o claudia + agua</div></div>
+          <div class="meal"><div class="meal-time">Post-bici (30 min)</div><div class="meal-desc">Yogur natural + fruta permitida (ventana anabólica)</div></div>
+          <div class="meal"><div class="meal-time">Almuerzo</div><div class="meal-desc">Chochos con tomate + aguacate · Pollo estofado 90g · 2 tazas ensalada · Agua</div></div>
+          <div class="meal"><div class="meal-time">Media tarde</div><div class="meal-desc">Kiwi + almendras 4–6 und</div></div>
+          <div class="meal"><div class="meal-time">Merienda</div><div class="meal-desc">Ensalada con pollo doble + nueces + Agua aromática</div></div>
+        </div>
+      </div>
+
+      <div class="day-card" onclick="togDay(this)">
+        <div class="day-hdr">
+          <div class="day-left"><div class="day-name">Domingo</div><span class="badge badge-run">🏃 Trote 1h 30 min</span></div>
+          <span class="day-chevron">▾</span>
+        </div>
+        <div class="day-body">
+          <div class="meal"><div class="meal-time">Pre-salida</div><div class="meal-desc">Manzana verde + agua (1h30 requiere glucógeno)</div></div>
+          <div class="meal"><div class="meal-time">Desayuno post-trote</div><div class="meal-desc">Agua aromática + Mango de verde + Aguacate + Huevo + 2 claras (fritos en agua o sartén sin grasa)</div></div>
+          <div class="meal"><div class="meal-time">Media mañana</div><div class="meal-desc">Verduras picadas + almendras + nueces</div></div>
+          <div class="meal"><div class="meal-time">Almuerzo</div><div class="meal-desc">Pescado a la plancha 90g + 2 tazas ensalada + quinoa ½ tz · Agua · ½ tz quinua</div></div>
+          <div class="meal"><div class="meal-time">Media tarde</div><div class="meal-desc">Tallo de apio + zanahoria + nueces · Pollo al horno doble · Ensalada</div></div>
+          <div class="meal"><div class="meal-time">Merienda</div><div class="meal-desc">Ensalada con pollo doble + Agua aromática</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETOX -->
+    <div id="detox" class="page">
+      <div class="detox-hero">
+        <h2>🌿 Protocolo Detox — Primeros 7 días</h2>
+        <p>Indicado por tu nutricionista IESS para iniciar el proceso de depuración hepática y control glucémico.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🥤 Jugo Detox (en ayunas — 7 días)</div>
+        <div class="meal">
+          <div class="meal-time">AL DESPERTAR — ANTES DE ENTRENAR</div>
+          <div class="meal-title">Jugo depurativo</div>
+          <div class="meal-desc">
+            1 tallo de apio<br>
+            1 manzana verde<br>
+            2 cdas de linaza molida<br>
+            ¼ sábila (aloe vera) — solo el gel interior<br>
+            150 ml agua<br>
+            <strong>Tomar en ayunas durante 7 días consecutivos</strong><br><br>
+            <strong>¿Por qué funciona?</strong> El apio tiene apigenina (antiinflamatoria), la manzana verde pectina (reduce LDL), la linaza omega-3 (triglicéridos), el aloe vera mejora sensibilidad a insulina. Evidencia: Journal of Ethnopharmacology 2019.
+          </div>
+        </div>
+      </div>
+
+      <div class="licuado-hero">
+        <h2>💜 Licuado Fase 2 — Después del día 7</h2>
+        <p>Indicación manuscrita de tu nutricionista para continuar el protocolo.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🥛 Licuado en ayunas (desde día 8)</div>
+        <div class="meal">
+          <div class="meal-time">EN AYUNAS — REEMPLAZA AL JUGO DETOX</div>
+          <div class="meal-title">Licuado proteico-funcional</div>
+          <div class="meal-desc">
+            Agua (base)<br>
+            15 frutos secos (nueces o almendras mixtas)<br>
+            2 sobres gelatina sin sabor (colágeno — articulaciones para correr y bici)<br>
+            3 cdas hojuelas de avena<br>
+            <strong>Licuar todo junto y tomar en ayunas</strong><br><br>
+            <strong>Beneficios científicos:</strong> La avena reduce LDL (beta-glucano), los frutos secos aportan omega-3 vegetal, la gelatina sin sabor protege cartílagos sometidos al impacto del running (Dr. Keith Baar, UC Davis).
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📅 Cronograma del protocolo</div>
+        <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Días 1–7:</strong> Jugo detox en ayunas (apio + manzana verde + linaza + aloe + agua) antes de entrenar</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Día 8 en adelante:</strong> Licuado (agua + 15 frutos secos + 2 sobres gelatina + 3 cdas avena) en ayunas</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Siempre:</strong> Manzana verde como pre-entreno físico (después del licuado/detox, 15 min antes de salir)</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Meta:</strong> Repetir exámenes en 3 meses para verificar reducción de colesterol y glucosa</div></div>
+      </div>
+    </div>
+
+    <!-- MI PLATO -->
+    <div id="plato" class="page">
+      <div class="card">
+        <div class="card-title">🍽️ Estructura del plato saludable (IESS)</div>
+        <div class="plato-row"><div class="plato-pct" style="color:#16a34a">50%</div><div class="plato-txt"><strong>Verduras y hortalizas</strong>Lechuga, espinaca, acelga, berros, brócoli, zanahoria, pepino, tomate, zucchini, pimiento, apio</div></div>
+        <div class="plato-row"><div class="plato-pct" style="color:#2563eb">25%</div><div class="plato-txt"><strong>Proteína saludable</strong>Pollo sin piel, pescado, huevo — al jugo, estofado, horno o plancha. NUNCA frito.</div></div>
+        <div class="plato-row"><div class="plato-pct" style="color:#d97706">25%</div><div class="plato-txt"><strong>Carbohidrato integral</strong>Arroz integral, quinoa, lentejas, chochos, avena, tubérculos (½ tz)</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🥗 Ensalada completa (guía IESS)</div>
+        <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Base verde:</strong> lechuga, espinaca, acelga, berros, rúcula</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Agrega verduras o frutas:</strong> tomate, zanahoria, pepino, ají, frutilla</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Proteína baja en grasa:</strong> pollo, huevo, atún, pescado</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-text"><strong>20g semillas o frutos secos:</strong> nueces, almendras, semillas calabaza</div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-text"><strong>Aderezo bajo en grasa:</strong> vinagreta, aceite oliva, limón. NUNCA mayonesa.</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔄 Cambia estas 4 cosas (indicación nutricionista)</div>
+        <div class="change"><div class="change-icon">❌→✅</div><div class="change-body"><strong>Mantequilla → Aguacate ¼</strong>Grasa monoinsaturada que sube HDL y baja LDL</div></div>
+        <div class="change"><div class="change-icon">❌→✅</div><div class="change-body"><strong>Sour cream → Yogur griego natural</strong>Proteína sin grasa saturada</div></div>
+        <div class="change"><div class="change-icon">❌→✅</div><div class="change-body"><strong>Soda / gaseosa → Agua</strong>Elimina 150+ calorías vacías y reduce triglicéridos</div></div>
+        <div class="change"><div class="change-icon">❌→✅</div><div class="change-body"><strong>Croutones → Nueces 4–6 und</strong>Omega-3 vegetal vs carbohidrato refinado</div></div>
+      </div>
+    </div>
+
+    <!-- GUÍA ALIMENTOS -->
+    <div id="alimentos" class="page">
+      <div class="card">
+        <div class="card-title">📋 Guía alimentaria IESS Sangolquí</div>
+        <table class="food-table">
+          <tr><th>Grupo</th><th>Alimentos y porción</th></tr>
+          <tr><td>Lácteos</td><td>Leche descremada 200ml · Yogur natural 150ml · Queso fresco 30g (consumo moderado)</td></tr>
+          <tr><td>Cereales</td><td>Arroz 150g/½ tz · Choclo 1 und · Sin gluten: amaranto, quinua, avena orgánica, linaza · Pan integral 1 und · Pan de agua 1 und · Galletas integrales 3–4 und · NO trigo, cebada, centeno (1 mes)</td></tr>
+          <tr><td>Tubérculos</td><td>Camote, yuca, oca, zanahoria blanca, melloco ½ tz · Papa grande 1 und / mediana 3 und</td></tr>
+          <tr><td>Carnes</td><td>Pollo, pescado 90g · Carnes rojas 90g (limitar: sin piel, sin grasa) · Huevo 1 und · NUNCA fritos</td></tr>
+          <tr><td>Leguminosas</td><td>Arveja, fréjol, haba, chochos ½ tz (preferir granos tiernos)</td></tr>
+          <tr><td>Verduras ⭐</td><td>Acelga, brócoli, vainita, apio, berro, espinaca, cebolla, col, coliflor, lechuga, zanahoria, zapallo, tomate, riñón, rábano, pimiento, pepinillo, zucchini · ½ tz vapor / 1 tz cruda</td></tr>
+          <tr><td>Frutas</td><td>Claudia, mandarina pequeña 3 und · Pera, naranja, mandarina grande, lima, pepino, granadilla, kiwi, tuna, pitajaya, limón, manzana verde 1 und · Papaya, piña, babaco 1 tz · Naranjilla, mora, tomate árbol, maracuyá, frutilla, guayaba ½ tz · 1x/sem: uvas, plátano, manzana roja, chirimoya, guanábana, melón, sandía</td></tr>
+          <tr><td>Grasas ⭐</td><td>Aceite girasol/oliva/canola 1 cdta · Nueces, almendras 4–6 und · Aceitunas 4 und · Aguacate ¼</td></tr>
+          <tr><td>Condimentos</td><td>Ajo, culantro, perejil, orégano, albahaca, hierba buena · Sal 3–5g · Stevia (endulzar)</td></tr>
+          <tr><td>Agua</td><td>6–8 vasos al día mínimo</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">❌ Alimentos limitados / prohibidos</div>
+        <div class="sec-lbl">Limitar mucho</div>
+        <div class="chips">
+          <div class="chip chip-yellow">Salchicha, salami, jamón</div>
+          <div class="chip chip-yellow">Concha, camarón, calamar</div>
+          <div class="chip chip-yellow">Pastor, fideo, tallarín</div>
+          <div class="chip chip-yellow">Atún/sardina en conserva</div>
+        </div>
+        <div class="sec-lbl" style="margin-top:12px;">Eliminar completamente</div>
+        <div class="chips">
+          <div class="chip chip-red">Gaseosas y bebidas energizantes</div>
+          <div class="chip chip-red">Caramelos, chocolate, mermelada</div>
+          <div class="chip chip-red">Helados, flanes, leche condensada</div>
+          <div class="chip chip-red">Azúcar, panela, miel</div>
+          <div class="chip chip-red">Manteca, margarina, mayonesa</div>
+          <div class="chip chip-red">Jugos de fruta industrializados</div>
+          <div class="chip chip-red">Galletas rellenas, pasteles</div>
+          <div class="chip chip-red">Fritos de cualquier tipo</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">⭐ Alimentos estrella para tu perfil</div>
+        <div class="chips">
+          <div class="chip chip-green">🐟 Pescado 3–4x/sem (omega-3)</div>
+          <div class="chip chip-green">🥑 Aguacate ¼ (sube HDL)</div>
+          <div class="chip chip-green">🌰 Nueces 4–6 und (omega-3)</div>
+          <div class="chip chip-green">🌱 Linaza molida (fibra)</div>
+          <div class="chip chip-green">🥦 Brócoli (fibra + glucosa)</div>
+          <div class="chip chip-green">🍵 Té verde 2 tzs/día</div>
+          <div class="chip chip-green">🍎 Manzana verde (IG bajo)</div>
+          <div class="chip chip-green">🫘 Chochos (proteína vegetal)</div>
+          <div class="chip chip-green">🧄 Ajo (antiinflamatorio)</div>
+          <div class="chip chip-green">🥬 Apio (depurativo)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGLAS -->
+    <div id="reglas" class="page">
+      <div class="card">
+        <div class="card-title">📜 Recomendaciones nutricionales IESS</div>
+        <div class="tip"><div class="tip-n">1</div><div class="tip-text"><strong>Horarios fijos de comida</strong> — no saltarse ninguna, 4–5 comidas balanceadas diarias</div></div>
+        <div class="tip"><div class="tip-n">2</div><div class="tip-text"><strong>Masticar bien la comida</strong> — come despacio, la saciedad llega a los 20 min</div></div>
+        <div class="tip"><div class="tip-n">3</div><div class="tip-text"><strong>Sin televisión ni celular</strong> al momento de comer — la distracción retrasa la saciedad</div></div>
+        <div class="tip"><div class="tip-n">4</div><div class="tip-text"><strong>Actividad física 30–60 min diarios</strong> — ya lo cumples perfectamente</div></div>
+        <div class="tip"><div class="tip-n">5</div><div class="tip-text"><strong>Última comida 2–3h antes de acostarse</strong> — clave para glucosa y triglicéridos</div></div>
+        <div class="tip"><div class="tip-n">6</div><div class="tip-text"><strong>Carne de res máx 1 vez/semana</strong> — sin piel, sin grasa, sin tejido conectivo</div></div>
+        <div class="tip"><div class="tip-n">7</div><div class="tip-text"><strong>Cerdo y mariscos cada 15 días</strong> máximo</div></div>
+        <div class="tip"><div class="tip-n">8</div><div class="tip-text"><strong>Evitar fritos</strong> siempre — preparar al jugo, estofado, horno o plancha</div></div>
+        <div class="tip"><div class="tip-n">9</div><div class="tip-text"><strong>Consumir linaza en el yogur</strong> diariamente — fibra soluble clave</div></div>
+        <div class="tip"><div class="tip-n">10</div><div class="tip-text"><strong>Endulzar solo con stevia</strong> — hojas naturales o sobres sin azúcar añadida</div></div>
+        <div class="tip"><div class="tip-n">11</div><div class="tip-text"><strong>3–4 porciones de fruta y 5–6 de verdura</strong> al día</div></div>
+        <div class="tip"><div class="tip-n">12</div><div class="tip-text"><strong>Cocinar más en casa</strong> — evitar restaurantes, al menos incluirlo cada 15 días</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🧠 Para no comer por ansiedad</div>
+        <ul class="plain">
+          <li>Respetar los horarios alimenticios estrictamente</li>
+          <li>Evitar la cafeína en exceso</li>
+          <li>Mantenerse hidratado — tomar agua primero</li>
+          <li>Caminar o hacer actividad física leve</li>
+          <li>No hacer otras actividades mientras come (TV, celular)</li>
+          <li>Realizar 4–5 comidas balanceadas al día</li>
+          <li>Incorporar frutas o vegetales en todas las comidas</li>
+          <li>Planificar el menú semanal, sobre todo las cenas</li>
+          <li>No excederse en la cena — consumir alimentos ligeros</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SALUD -->
+    <div id="salud" class="page">
+      <div class="card">
+        <div class="card-title">📊 Tus resultados actuales</div>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;"><span style="font-weight:600;">Triglicéridos</span><span style="color:var(--green); font-weight:700;">88 ✅ Normal (&lt;150)</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:29%; background:var(--green);"></div></div>
+
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin:10px 0 4px;"><span style="font-weight:600;">Colesterol total</span><span style="color:var(--yellow); font-weight:700;">223 ⚠️ Alto (&lt;200)</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:74%; background:var(--yellow);"></div></div>
+
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin:10px 0 4px;"><span style="font-weight:600;">Glucosa en ayunas</span><span style="color:var(--red); font-weight:700;">132 🔴 Alta (&lt;100)</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:88%; background:var(--red);"></div></div>
+        </div>
+      </div>
+
+      <div class="box box-purple">🏅 ¡Logro enorme! Los triglicéridos bajaron de alto a 88 (normal). Eso demuestra que el plan funciona. Ahora enfocarse en glucosa y colesterol.</div>
+
+      <div class="card">
+        <div class="card-title">🎯 Estrategia para glucosa 132 (prioridad #1)</div>
+        <div class="change"><div class="change-icon">🍎</div><div class="change-body"><strong>Manzana verde pre-entreno (NO banano/dátil)</strong>IG 38 vs IG 62 del banano. Menos impacto glucémico antes del ejercicio en ayunas.</div></div>
+        <div class="change"><div class="change-icon">🌿</div><div class="change-body"><strong>Stevia como único endulzante</strong>Cero impacto en glucosa. Eliminar completamente azúcar, panela y miel.</div></div>
+        <div class="change"><div class="change-icon">🥗</div><div class="change-body"><strong>Orden del plato: verduras → proteína → carbo</strong>Reduce el pico glucémico postprandial hasta 30% (Dr. Jessie Inchauspé — Glucose Revolution).</div></div>
+        <div class="change"><div class="change-icon">🚶</div><div class="change-body"><strong>Caminar 10–15 min después del almuerzo</strong>Reduce glucosa postprandial hasta 22%. El músculo actúa como esponja de glucosa.</div></div>
+        <div class="change"><div class="change-icon">🌱</div><div class="change-body"><strong>Linaza molida diaria</strong>2 cdas en jugos o yogur. La fibra soluble ralentiza absorción de glucosa.</div></div>
+        <div class="change"><div class="change-icon">😴</div><div class="change-body"><strong>Dormir 7–8 horas</strong>El mal sueño eleva cortisol y glucosa basal directamente. Crítico en tu caso.</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🎯 Estrategia para colesterol 223</div>
+        <div class="change"><div class="change-icon">🐟</div><div class="change-body"><strong>Pescado 3–4x/semana</strong>Omega-3 EPA/DHA reduce LDL y sube HDL. El cambio #1 para colesterol.</div></div>
+        <div class="change"><div class="change-icon">🌰</div><div class="change-body"><strong>Nueces y almendras diarias (4–6 und)</strong>Ácidos grasos insaturados que reducen LDL hasta 5% en 4 semanas.</div></div>
+        <div class="change"><div class="change-icon">🫘</div><div class="change-body"><strong>Chochos y legumbres diariamente</strong>La fibra soluble atrapa colesterol en el intestino antes de absorberlo.</div></div>
+        <div class="change"><div class="change-icon">🥑</div><div class="change-body"><strong>Aguacate ¼ diario</strong>Grasa monoinsaturada — sube HDL (bueno) y baja LDL (malo). Ya lo tienes en el desayuno.</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔬 Exámenes pendientes</div>
+        <ul class="plain">
+          <li>HbA1c (hemoglobina glicosilada) — diagnóstico definitivo glucosa</li>
+          <li>Insulina en ayunas + índice HOMA-IR</li>
+          <li>Colesterol LDL y HDL por separado (no solo el total)</li>
+          <li>PSA (antígeno prostático) — anual desde los 45 años</li>
+          <li>TSH (tiroides — hipotiroidismo eleva colesterol)</li>
+          <li>Repetir perfil lipídico completo en 3 meses</li>
+        </ul>
+      </div>
+
+      <div class="box box-green">🎯 Meta en 3 meses: Glucosa &lt;100 mg/dL · Colesterol &lt;200 · Triglicéridos mantener &lt;150. Con el plan IESS + ejercicio diario es completamente alcanzable.</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function showPage(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    document.querySelector('.content').scrollTop = 0;
+  }
+  function togDay(el) { el.classList.toggle('open'); }
+</script>
+</body>
+</html>
