@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#ea580c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Plan de Fuerza · José</title>
+<style>
+:root {
+  --bg:#f8fafc;--card:#fff;--border:#e2e8f0;
+  --green:#16a34a;--green-l:#dcfce7;--green-t:#14532d;
+  --orange:#ea580c;--orange-l:#ffedd5;--orange-t:#7c2d12;
+  --red:#dc2626;--red-l:#fee2e2;--red-t:#7f1d1d;
+  --purple:#7c3aed;--purple-l:#ede9fe;--purple-t:#4c1d95;
+  --blue:#2563eb;--blue-l:#dbeafe;--blue-t:#1e3a8a;
+  --text:#0f172a;--text2:#475569;--text3:#94a3b8;
+  --shadow:0 1px 3px rgba(0,0,0,.08);--r:14px;--r-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+body{padding-bottom:40px}
+
+.hdr{background:linear-gradient(135deg,#ea580c,#f97316);padding:16px;padding-top:max(16px,env(safe-area-inset-top));color:#fff;margin-bottom:14px}
+.hdr h1{font-size:20px;font-weight:800;margin-bottom:4px}
+.hdr p{font-size:13px;opacity:.9;line-height:1.5}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);border:none;color:#fff;padding:7px 13px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:12px;text-decoration:none}
+
+.wrap{padding:0 14px}
+.card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.card-t{font-size:15px;font-weight:700;color:var(--text);margin-bottom:11px}
+
+.tabs{display:flex;gap:0;background:var(--card);border-radius:var(--r);border:1px solid var(--border);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow)}
+.tab{flex:1;padding:11px 4px;font-size:12px;font-weight:600;border:none;cursor:pointer;background:transparent;color:var(--text3);text-align:center;line-height:1.4}
+.tab.active{background:var(--orange);color:#fff}
+
+.rutina{display:none}.rutina.active{display:block}
+
+/* EXERCISE CARD */
+.ex{background:var(--card);border-radius:var(--r);margin-bottom:16px;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden}
+.ex-media{width:100%;background:#0f172a;display:flex;align-items:center;justify-content:center;min-height:220px;position:relative}
+.ex-media img{width:100%;max-height:260px;object-fit:contain;display:block}
+.ex-media-err{color:#64748b;font-size:13px;text-align:center;padding:20px}
+.ex-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
+.ex-body{padding:14px}
+.ex-name{font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px}
+.ex-equip{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;background:var(--orange-l);color:var(--orange-t);margin-bottom:10px}
+.ex-equip.purple{background:var(--purple-l);color:var(--purple-t)}
+.sets-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
+.set-box{background:#f8fafc;border-radius:9px;padding:9px 5px;text-align:center;border:1px solid var(--border)}
+.set-val{font-size:18px;font-weight:800;color:var(--orange)}
+.set-val.p{color:var(--purple)}
+.set-lbl{font-size:10px;color:var(--text3);margin-top:2px}
+.steps-lbl{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:9px}
+.paso{display:flex;gap:9px;margin-bottom:8px;align-items:flex-start}
+.paso-n{width:23px;height:23px;background:var(--orange);color:#fff;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.paso-n.p{background:var(--purple)}
+.paso-t{font-size:13px;color:var(--text2);line-height:1.65}
+.paso-t strong{color:var(--text);font-weight:600}
+.tip{background:var(--green-l);border:1px solid #bbf7d0;border-radius:9px;padding:10px 12px;font-size:12.5px;color:var(--green-t);margin-top:10px;line-height:1.6}
+.warn{background:var(--red-l);border:1px solid #fecaca;border-radius:9px;padding:10px 12px;font-size:12.5px;color:var(--red-t);margin-top:7px;line-height:1.6}
+
+.week-t{width:100%;border-collapse:collapse;font-size:12px}
+.week-t th{background:#f8fafc;padding:8px 5px;text-align:center;border:1px solid var(--border);font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text3)}
+.week-t td{padding:8px 5px;border:1px solid var(--border);text-align:center;font-size:11px;color:var(--text2);line-height:1.5}
+.td-a{background:#fff7ed;color:var(--orange-t);font-weight:700}
+.td-b{background:var(--purple-l);color:var(--purple-t);font-weight:700}
+.td-c{background:var(--green-l);color:var(--green-t);font-weight:600}
+.td-x{background:#f8fafc;color:var(--text3)}
+
+.prog{background:var(--orange-l);border:1px solid #fed7aa;border-radius:var(--r-sm);padding:13px;margin-bottom:10px}
+.prog h4{font-size:13px;font-weight:700;color:var(--orange-t);margin-bottom:6px}
+.prog p{font-size:12.5px;color:#9a3412;line-height:1.6}
+.sci{background:var(--purple-l);border:1px solid #ddd6fe;border-radius:var(--r-sm);padding:13px;margin-bottom:10px;font-size:13px;color:var(--purple-t);line-height:1.6}
+.box-g{background:var(--green-l);border:1px solid #bbf7d0;border-radius:var(--r-sm);padding:13px;margin-bottom:10px;font-size:13px;color:var(--green-t);line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <a class="back-btn" href="index.html">← Volver al Plan</a>
+  <h1>💪 Plan de Fuerza</h1>
+  <p>3 sesiones/semana · Control de insulina y glucosa · Harvard Medical School</p>
+</div>
+
+<div class="wrap">
+
+  <div class="sci">🧬 <strong>¿Por qué la fuerza mejora tu insulina?</strong> El músculo capta glucosa directamente sin necesitar insulina durante 24–48h post-entrenamiento. 3 sesiones/semana reducen HbA1c hasta 0.6% en 12 semanas (JAMA 2023) — efecto similar a la metformina.</div>
+
+  <div class="card">
+    <div class="card-t">📅 Distribución semanal</div>
+    <table class="week-t">
+      <tr><th>Día</th><th>Cardio</th><th>Fuerza</th></tr>
+      <tr><td><strong>Lun</strong></td><td class="td-c">Trote Z2 45min</td><td class="td-a">Rutina A</td></tr>
+      <tr><td><strong>Mar</strong></td><td class="td-c">Bici 1h</td><td class="td-x">Descanso</td></tr>
+      <tr><td><strong>Mié</strong></td><td class="td-c">Fartlek</td><td class="td-b">Rutina B</td></tr>
+      <tr><td><strong>Jue</strong></td><td class="td-c">Bici 1h</td><td class="td-x">Descanso</td></tr>
+      <tr><td><strong>Vie</strong></td><td class="td-c">Trote Z2 45min</td><td class="td-a">Rutina A</td></tr>
+      <tr><td><strong>Sáb</strong></td><td class="td-c">Bici 2h</td><td class="td-x">Descanso</td></tr>
+      <tr><td><strong>Dom</strong></td><td class="td-c">Trote 1h30</td><td class="td-x">Descanso</td></tr>
+    </table>
+    <p style="font-size:11px;color:var(--text3);margin-top:8px">Fuerza DESPUÉS del cardio · Antes del desayuno · 25–30 minutos</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showRutina('a',this)">💪 Rutina A<br><span style="font-size:10px;font-weight:400">Lun + Vie</span></button>
+    <button class="tab" onclick="showRutina('b',this)">💪 Rutina B<br><span style="font-size:10px;font-weight:400">Miércoles</span></button>
+    <button class="tab" onclick="showRutina('prog',this)">📈 Progresión</button>
+  </div>
+
+  <!-- RUTINA A: TREN INFERIOR -->
+  <div id="rutina-a" class="rutina active">
+    <div class="card" style="background:var(--orange-l);border-color:#fed7aa;margin-bottom:14px">
+      <div style="font-size:14px;font-weight:700;color:var(--orange-t);margin-bottom:4px">💪 Rutina A — Tren Inferior + Core</div>
+      <div style="font-size:13px;color:#9a3412;line-height:1.6">Lunes y Viernes · 25–30 min · Después del cardio<br>Piernas = músculos más grandes = máxima captación de glucosa</div>
+    </div>
+
+    <!-- 1. SENTADILLA -->
+    <div class="ex">
+      <div class="ex-media">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/SquatLift.gif/220px-SquatLift.gif"
+             alt="Sentadilla con barra"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ex-media-err" style="display:none">
+          <div>
+            <div style="font-size:40px;margin-bottom:8px">🏋️</div>
+            <div>SENTADILLA CON BARRA</div>
+            <div style="font-size:11px;margin-top:4px;color:#94a3b8">Busca en YouTube: "sentadilla con barra técnica"</div>
+          </div>
+        </div>
+        <div class="ex-badge">Tren inferior</div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-name">1. Sentadilla con Barra</div>
+        <div class="ex-equip">🏋️ Barra 8kg → hasta 28kg progresivo</div>
+        <div class="sets-row">
+          <div class="set-box"><div class="set-val">3</div><div class="set-lbl">Series</div></div>
+          <div class="set-box"><div class="set-val">12</div><div class="set-lbl">Reps</div></div>
+          <div class="set-box"><div class="set-val">60s</div><div class="set-lbl">Descanso</div></div>
+        </div>
+        <div class="steps-lbl">Ejecución paso a paso:</div>
+        <div class="paso"><div class="paso-n">1</div><div class="paso-t">Coloca la barra sobre los <strong>trapecios</strong> (músculos altos de la espalda, NO en el cuello)</div></div>
+        <div class="paso"><div class="paso-n">2</div><div class="paso-t">Pies a la anchura de hombros, puntas ligeramente hacia afuera (posición 11 y 1 del reloj)</div></div>
+        <div class="paso"><div class="paso-n">3</div><div class="paso-t"><strong>Baja despacio (3 seg):</strong> dobla rodillas y caderas como si fueras a sentarte en una silla. Espalda recta.</div></div>
+        <div class="paso"><div class="paso-n">4</div><div class="paso-t">Baja hasta muslos paralelos al suelo (90°). Las rodillas apuntan hacia los pies.</div></div>
+        <div class="paso"><div class="paso-n">5</div><div class="paso-t"><strong>Sube empujando el suelo,</strong> exhala al subir. Extiende completamente las caderas arriba.</div></div>
+        <div class="tip">✅ <strong>Clave:</strong> Pecho arriba, espalda recta, rodillas no caen hacia adentro. Empieza con barra sola (8kg) para aprender la técnica.</div>
+        <div class="warn">❌ <strong>Evitar:</strong> Doblar la espalda baja, dejar las rodillas caer hacia adentro, bajar demasiado rápido.</div>
+      </div>
+    </div>
+
+    <!-- 2. PESO MUERTO RUMANO -->
+    <div class="ex">
+      <div class="ex-media">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Romanian_Deadlift.gif/220px-Romanian_Deadlift.gif"
+             alt="Peso muerto rumano"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ex-media-err" style="display:none">
+          <div><div style="font-size:40px;margin-bottom:8px">🏋️</div><div>PESO MUERTO RUMANO</div><div style="font-size:11px;margin-top:4px;color:#94a3b8">Busca: "Romanian deadlift técnica"</div></div>
+        </div>
+        <div class="ex-badge">Isquiotibiales</div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-name">2. Peso Muerto Rumano</div>
+        <div class="ex-equip">🏋️ Barra 18kg · Isquiotibiales + Glúteos</div>
+        <div class="sets-row">
+          <div class="set-box"><div class="set-val">3</div><div class="set-lbl">Series</div></div>
+          <div class="set-box"><div class="set-val">10</div><div class="set-lbl">Reps</div></div>
+          <div class="set-box"><div class="set-val">90s</div><div class="set-lbl">Descanso</div></div>
+        </div>
+        <div class="steps-lbl">Ejecución paso a paso:</div>
+        <div class="paso"><div class="paso-n">1</div><div class="paso-t">De pie, barra frente a los muslos, pies a la anchura de caderas, rodillas ligeramente dobladas</div></div>
+        <div class="paso"><div class="paso-n">2</div><div class="paso-t"><strong>Empuja las caderas hacia atrás</strong> (imagina cerrar una puerta con el trasero) mientras bajas la barra por las piernas</div></div>
+        <div class="paso"><div class="paso-n">3</div><div class="paso-t">Baja hasta sentir un estiramiento en la parte posterior del muslo. La barra siempre cerca de las piernas.</div></div>
+        <div class="paso"><div class="paso-n">4</div><div class="paso-t"><strong>Sube:</strong> empuja caderas hacia adelante, contrae el glúteo al llegar arriba.</div></div>
+        <div class="tip">✅ <strong>Clave:</strong> Espalda recta como tabla todo el tiempo. El estiramiento en isquiotibiales confirma que lo haces bien.</div>
+        <div class="warn">❌ <strong>No es una sentadilla:</strong> las rodillas casi no se doblan. El movimiento viene de las caderas.</div>
+      </div>
+    </div>
+
+    <!-- 3. ZANCADAS -->
+    <div class="ex">
+      <div class="ex-media">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Dumbbell_lunge.gif/220px-Dumbbell_lunge.gif"
+             alt="Zancadas con peso"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ex-media-err" style="display:none">
+          <div><div style="font-size:40px;margin-bottom:8px">🦵</div><div>ZANCADAS CON KETTLEBELL</div><div style="font-size:11px;margin-top:4px;color:#94a3b8">Busca: "zancadas con peso técnica"</div></div>
+        </div>
+        <div class="ex-badge">Cuádriceps</div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-name">3. Zancadas con Kettlebell</div>
+        <div class="ex-equip">🔔 1 kettlebell 8kg en cada mano</div>
+        <div class="sets-row">
+          <div class="set-box"><div class="set-val">3</div><div class="set-lbl">Series</div></div>
+          <div class="set-box"><div class="set-val">10</div><div class="set-lbl">c/pierna</div></div>
+          <div class="set-box"><div class="set-val">60s</div><div class="set-lbl">Descanso</div></div>
+        </div>
+        <div class="steps-lbl">Ejecución paso a paso:</div>
+        <div class="paso"><div class="paso-n">1</div><div class="paso-t">De pie, kettlebells a los lados del cuerpo, espalda recta, mirada al frente</div></div>
+        <div class="paso"><div class="paso-n">2</div><div class="paso-t"><strong>Da un paso largo hacia adelante</strong> con el pie derecho. La rodilla trasera baja hacia el suelo sin tocarlo.</div></div>
+        <div class="paso"><div class="paso-n">3</div><div class="paso-t">Rodilla delantera forma 90° y NO pasa la punta del pie. Torso vertical.</div></div>
+        <div class="paso"><div class="paso-n">4</div><div class="paso-t"><strong>Empuja hacia atrás</strong> con el pie delantero para volver. Alterna pierna izquierda.</div></div>
+        <div class="tip">✅ Si es difícil al inicio, hazlas sin peso hasta dominar el equilibrio.</div>
+      </div>
+    </div>
+
+    <!-- 4. HIP THRUST -->
+    <div class="ex">
+      <div class="ex-media">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Hip_thrust.gif/220px-Hip_thrust.gif"
+             alt="Hip thrust"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ex-media-err" style="display:none">
+          <div><div style="font-size:40px;margin-bottom:8px">🍑</div><div>HIP THRUST</div><div style="font-size:11px;margin-top:4px;color:#94a3b8">Busca: "hip thrust con barra técnica"</div></div>
+        </div>
+        <div class="ex-badge">Glúteos</div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-name">4. Hip Thrust con Barra</div>
+        <div class="ex-equip">🏋️ Barra 8–18kg · El mejor ejercicio para glúteos</div>
+        <div class="sets-row">
+          <div class="set-box"><div class="set-val">3</div><div class="set-lbl">Series</div></div>
+          <div class="set-box"><div class="set-val">15</div><div class="set-lbl">Reps</div></div>
+          <div class="set-box"><div class="set-val">60s</div><div class="set-lbl">Descanso</div></div>
+        </div>
+        <div class="steps-lbl">Ejecución paso a paso:</div>
+        <div class="paso"><div class="paso-n">1</div><div class="paso-t">Apoya la parte alta de la espalda en un banco, sofá o silla firme. Pies apoyados en el suelo.</div></div>
+        <div class="paso"><div class="paso-n">2</div><div class="paso-t">Coloca la barra sobre las caderas (pon una toalla para amortiguar el peso)</div></div>
+        <div class="paso"><div class="paso-n">3</div><div class="paso-t"><strong>Empuja caderas hacia arriba</strong> contrayendo el glúteo. Cuerpo forma línea recta hombros-caderas-rodillas.</div></div>
+        <div class="paso"><div class="paso-n">4</div><div class="paso-t">Mantén 1 segundo arriba apretando el glúteo con fuerza. Baja controlado.</div></div>
+        <div class="tip">✅ <strong>Clave:</strong> Aprieta el glúteo como si quisieras "aplastar una nuez". Sentirás el trabajo en glúteo e isquiotibiales.</div>
+      </div>
+    </div>
+
+    <!-- 5. KETTLEBELL SWING -->
+    <div class="ex">
+      <div class="ex-media">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Kettlebell_swing.gif/220px-Kettlebell_swing.gif"
+             alt="Kettlebell swing"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ex-media-err" style="display:none">
+          <div><div style="font-size:40px;margin-bottom:8px">🔔</div><div>KETTLEBELL SWING</div><div style="font-size:11px;margin-top:4px;color:#94a3b8">Busca: "kettlebell swing técnica"</div></div>
+        </div>
+        <div class="ex-badge">Core + Cardio</div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-name">5. Kettlebell Swing</div>
+        <div class="ex-equip">🔔 Kettlebell 8kg · Glúteos + Core + Cardio</div>
+        <div class="sets-row">
+          <div class="set-box"><div class="set-val">3</div><div class="set-lbl">Series</div></div>
+          <div class="set-box"><div class="set-val">15</div><div class="set-lbl">Reps</div></div>
+          <div class="set-box"><div class="set-val">60s</div><div class="set-lbl">Descanso</div></div>
+        </div>
+        <div class="steps-lbl">Ejecución paso a paso:</div>
+        <div class="paso"><div class="paso-n">1</div><div class="paso-t">Pies más anchos que hombros, kettlebell en el suelo entre tus pies. Tómalo con ambas manos.</div></div>
+        <div class="paso"><div class="paso-n">2</div><div class="paso-t"><strong>Empuja caderas hacia atrás</strong> (como peso muerto) dejando que el kettlebell pase entre las piernas hacia atrás.</div></div>
+        <div class="paso"><div class="paso-n">3</div><div class="paso-t"><strong>Explota las caderas hacia adelante</strong> con fuerza. El kettlebell sube hasta la altura del pecho por inercia.</div></div>
+        <div class="paso"><div class="paso-n">4</div><div class="paso-t">Deja que caiga hacia atrás entre las piernas y repite. Es un movimiento continuo y fluido.</div></div>
+        <div class="tip">✅ <strong>Clave:</strong> El movimiento viene de las CADERAS, no de los brazos. Los brazos solo guían el kettlebell.</div>
+        <div class="warn">❌ <strong>Evitar:</strong> Doblar la espalda baja. No es una sentadilla ni un ejercicio de hombros.</div>
+      </div>
+    </div>
+
+    <!-- 6. PLANCHA FITBALL -->
+    <div class="ex">
+      <div class="ex-media">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Plank_on_a_stability_ball.gif/220px-Plank_on_a_stability_ball.gif"
+             alt="Plancha en fitball"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ex-media-err" style="display:none">
+          <div><div style="font-size:40px;margin-bottom:8px">🏐</div><div>PLANCHA EN FITBALL</div><div style="font-size:11px;margin-top:4px;color:#94a3b8">Busca: "plancha pelota suiza"</div></div>
+        </div>
+        <div class="ex-badge">Core</div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-name">6. Plancha en Fitball</div>
+        <div class="ex-equip">🏐 Pelota grande · Core profundo</div>
+        <div class="sets-row">
+          <div class="set-box"><div class="set-val">3</div><div class="set-lbl">Series</div></div>
+          <div class="set-box"><div class="set-val">30s</div><div class="set-lbl">Tiempo</div></div>
+          <div class="set-box"><div class="set-val">45s</div><div class="set-lbl">Descanso</div></div>
+        </div>
+        <div class="steps-lbl">Ejecución paso a paso:</div>
+        <div class="paso"><div class="paso-n">1</div><div class="paso-t">Apoya codos y antebrazos sobre la pelota grande. Pies en el suelo.</div></div>
+        <div class="paso"><div class="paso-n">2</div><div class="paso-t">Cuerpo recto de cabeza a talones, como una tabla. Caderas ni arriba ni abajo.</div></div>
+        <div class="paso"><div class="paso-n">3</div><div class="paso-t"><strong>Mantén:</strong> aprieta abdomen y glúteos. Respira normal. Empieza 20 seg y progresa a 45 seg.</div></div>
+        <div class="tip">✅ La pelota inestable activa 30% más el core que la plancha normal en el suelo.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RUTINA B: TREN SUPERIOR -->
+  <div id="rutina-b" class="rutina">
+    <div class="card" style="background:var(--purple-l);border-color:#ddd6fe;margin-bottom:14px">
+      <div style="font-size:14px;font-weight:700;color:var(--purple-t);margin-bottom:4px">💪 Rutina B — Tren Superior + Core</div>
+      <div style="font-size:13px;color:#5b21b6;line-height:1.6">Miércoles · 25–30 min · Después del Fartlek<br>Pecho, espalda, hombros, bíceps, tríceps, abdomen</div>
+    </div>
+
+    <!-- 1. PRESS BANCA -->
+    <div class="ex">
+      <div class="ex-media">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Benchpress.gif/220px-Benchpress.gif"
+             alt="Press banca"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ex-media-err" style="display:none">
+          <div><div style="font-size:40px;margin-bottom:8px">🤸</div><div>PRESS BANCA</div><div style="font-size:11px;margin-top:4px;color:#94a3b8">Busca: "press banca técnica"</div></div>
+        </div>
+        <div class="ex-badge">Pecho</div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-name">1. Press Banca con Barra</div>
+        <div class="ex-equip purple">🏋️ Barra 8–18kg · Pecho + Tríceps + Hombros</div>
+        <div class="sets-row">
+          <div class="set-box"><div class="set-val p">3</div><div class="set-lbl">Series</div></div>
+          <div class="set-box"><div class="set-val p">10</div><div class="set-lbl">Reps</div></div>
+          <div class="set-box"><div class="set-val p">60s</div><div class="set-lbl">Descanso</div></div>
+        </div>
+        <div class="steps-lbl">Ejecución paso a paso:</div>
+        <div class="paso"><div class="paso-n p">1</div><div class="paso-t">Acostado en el banco, pies apoyados en el suelo. Agarre algo más ancho que los hombros.</div></div>
+        <div class="paso"><div class="paso-n p">2</div><div class="paso-t">Baja la barra controladamente hasta tocar el pecho (2–3 seg bajando). Codos a 45° del cuerpo.</div></div>
+        <div class="paso"><div class="paso-n p">3</div><div class="paso-t"><strong>Empuja hacia arriba</strong> extendiendo los brazos. Exhala al subir.</div></div>
+        <div class="tip">✅ Si no tienes banco, hazlo en el suelo (floor press) — igual de efectivo para empezar.</div>
+        <div class="warn">❌ No saques los glúteos del banco ni arquees demasiado la espalda baja.</div>
+      </div>
+    </div>
+
+    <!-- 2. REMO KETTLEBELL -->
+    <div class="ex">
+      <div class="ex-media">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Dumbbell_row.gif/220px-Dumbbell_row.gif"
+             alt="Remo con peso"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ex-media-err" style="display:none">
+          <div><div style="font-size:40px;margin-bottom:8px">🏋️</div><div>REMO CON KETTLEBELL</div><div style="font-size:11px;margin-top:4px;color:#94a3b8">Busca: "remo mancuerna un brazo"</div></div>
+        </div>
+        <div class="ex-badge">Espalda</div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-name">2. Remo con Kettlebell</div>
+        <div class="ex-equip purple">🔔 Kettlebell 8kg · Espalda + Bíceps</div>
+        <div class="sets-row">
+          <div class="set-box"><div class="set-val p">3</div><div class="set-lbl">Series</div></div>
+          <div class="set-box"><div class="set-val p">12</div><div class="set-lbl">c/lado</div></div>
+          <div class="set-box"><div class="set-val p">60s</div><div class="set-lbl">Descanso</div></div>
+        </div>
+        <div class="steps-lbl">Ejecución paso a paso:</div>
+        <div class="paso"><div class="paso-n p">1</div><div class="paso-t">Apoya una mano y rodilla del mismo lado en un banco. Espalda paralela al suelo.</div></div>
+        <div class="paso"><div class="paso-n p">2</div><div class="paso-t">Kettlebell en la otra mano, brazo extendido hacia el suelo.</div></div>
+        <div class="paso"><div class="paso-n p">3</div><div class="paso-t"><strong>Jala el kettlebell hacia la cadera,</strong> el codo pasa cerca del cuerpo hacia arriba.</div></div>
+        <div class="paso"><div class="paso-n p">4</div><div class="paso-t">Baja hasta extender el brazo. Repite y cambia de lado.</div></div>
+        <div class="tip">✅ Piensa en "meter el codo al bolsillo trasero del pantalón" para activar bien la espalda.</div>
+      </div>
+    </div>
+
+    <!-- 3. PRESS HOMBRO -->
+    <div class="ex">
+      <div class="ex-media">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Dumbbell_shoulder_press.gif/220px-Dumbbell_shoulder_press.gif"
+             alt="Press hombro mancuerna"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ex-media-err" style="display:none">
+          <div><div style="font-size:40px;margin-bottom:8px">💪</div><div>PRESS DE HOMBRO</div><div style="font-size:11px;margin-top:4px;color:#94a3b8">Busca: "press hombro mancuerna"</div></div>
+        </div>
+        <div class="ex-badge">Hombros</div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-name">3. Press de Hombro con Mancuernas</div>
+        <div class="ex-equip purple">💪 2 mancuernas 2.5kg · Hombros + Tríceps</div>
+        <div class="sets-row">
+          <div class="set-box"><div class="set-val p">3</div><div class="set-lbl">Series</div></div>
+          <div class="set-box"><div class="set-val p">12</div><div class="set-lbl">Reps</div></div>
+          <div class="set-box"><div class="set-val p">60s</div><div class="set-lbl">Descanso</div></div>
+        </div>
+        <div class="steps-lbl">Ejecución paso a paso:</div>
+        <div class="paso"><div class="paso-n p">1</div><div class="paso-t">Sentado o de pie, mancuernas a la altura de los hombros, palmas al frente, codos 90°.</div></div>
+        <div class="paso"><div class="paso-n p">2</div><div class="paso-t"><strong>Empuja hacia arriba</strong> hasta casi extender los brazos. Exhala al subir.</div></div>
+        <div class="paso"><div class="paso-n p">3</div><div class="paso-t">Baja controlado a la posición inicial. Core apretado todo el tiempo.</div></div>
+        <div class="tip">✅ Con 2.5kg dominado, progresa a 2.8kg y luego a las nuevas pesas que lleguen.</div>
+      </div>
+    </div>
+
+    <!-- 4. CURL BICEPS -->
+    <div class="ex">
+      <div class="ex-media">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Resistance_band_bicep_curl.gif/220px-Resistance_band_bicep_curl.gif"
+             alt="Curl bíceps liga"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ex-media-err" style="display:none">
+          <div><div style="font-size:40px;margin-bottom:8px">💪</div><div>CURL BÍCEPS CON LIGA</div><div style="font-size:11px;margin-top:4px;color:#94a3b8">Busca: "curl biceps banda elastica"</div></div>
+        </div>
+        <div class="ex-badge">Bíceps</div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-name">4. Curl de Bíceps con Liga Elástica</div>
+        <div class="ex-equip purple">🔗 Liga elástica o mancuernas 2.5kg</div>
+        <div class="sets-row">
+          <div class="set-box"><div class="set-val p">3</div><div class="set-lbl">Series</div></div>
+          <div class="set-box"><div class="set-val p">15</div><div class="set-lbl">Reps</div></div>
+          <div class="set-box"><div class="set-val p">45s</div><div class="set-lbl">Descanso</div></div>
+        </div>
+        <div class="steps-lbl">Ejecución paso a paso:</div>
+        <div class="paso"><div class="paso-n p">1</div><div class="paso-t">Pisa la liga elástica con ambos pies. Sostén los extremos, palmas hacia arriba.</div></div>
+        <div class="paso"><div class="paso-n p">2</div><div class="paso-t">Codos pegados al cuerpo durante todo el movimiento. Brazos extendidos abajo.</div></div>
+        <div class="paso"><div class="paso-n p">3</div><div class="paso-t"><strong>Dobla los codos</strong> subiendo las manos a los hombros. Aprieta el bíceps arriba 1 segundo.</div></div>
+        <div class="paso"><div class="paso-n p">4</div><div class="paso-t">Baja controlado — la bajada lenta (3 seg) es tan efectiva como la subida.</div></div>
+        <div class="tip">✅ Puedes alternar: semana con liga, semana con mancuernas 2.5kg.</div>
+      </div>
+    </div>
+
+    <!-- 5. CRUNCH FITBALL -->
+    <div class="ex">
+      <div class="ex-media">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Stability_ball_crunch.gif/220px-Stability_ball_crunch.gif"
+             alt="Crunch fitball"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ex-media-err" style="display:none">
+          <div><div style="font-size:40px;margin-bottom:8px">🏐</div><div>CRUNCH EN FITBALL</div><div style="font-size:11px;margin-top:4px;color:#94a3b8">Busca: "crunch pelota suiza"</div></div>
+        </div>
+        <div class="ex-badge">Abdomen</div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-name">5. Crunch en Fitball</div>
+        <div class="ex-equip purple">🏐 Pelota grande · Abdomen completo</div>
+        <div class="sets-row">
+          <div class="set-box"><div class="set-val p">3</div><div class="set-lbl">Series</div></div>
+          <div class="set-box"><div class="set-val p">15</div><div class="set-lbl">Reps</div></div>
+          <div class="set-box"><div class="set-val p">45s</div><div class="set-lbl">Descanso</div></div>
+        </div>
+        <div class="steps-lbl">Ejecución paso a paso:</div>
+        <div class="paso"><div class="paso-n p">1</div><div class="paso-t">Siéntate en la pelota y camina hacia adelante hasta que la espalda baja quede apoyada en ella.</div></div>
+        <div class="paso"><div class="paso-n p">2</div><div class="paso-t">Manos detrás de la cabeza (sin jalar el cuello). Pies en el suelo.</div></div>
+        <div class="paso"><div class="paso-n p">3</div><div class="paso-t"><strong>Contrae el abdomen</strong> y sube el torso. No te incorpores completamente. Baja y estírate sobre la pelota.</div></div>
+        <div class="tip">✅ La pelota da mayor rango de movimiento que el crunch en el suelo — más efectivo.</div>
+      </div>
+    </div>
+
+    <!-- 6. ROTACIÓN RUSA -->
+    <div class="ex">
+      <div class="ex-media">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Russian_twist.gif/220px-Russian_twist.gif"
+             alt="Rotación rusa"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ex-media-err" style="display:none">
+          <div><div style="font-size:40px;margin-bottom:8px">🔄</div><div>ROTACIÓN RUSA</div><div style="font-size:11px;margin-top:4px;color:#94a3b8">Busca: "rotación rusa abdomen"</div></div>
+        </div>
+        <div class="ex-badge">Oblicuos</div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-name">6. Rotación Rusa con Mancuerna</div>
+        <div class="ex-equip purple">💪 1 mancuerna 2.5kg · Oblicuos</div>
+        <div class="sets-row">
+          <div class="set-box"><div class="set-val p">3</div><div class="set-lbl">Series</div></div>
+          <div class="set-box"><div class="set-val p">20</div><div class="set-lbl">Reps</div></div>
+          <div class="set-box"><div class="set-val p">45s</div><div class="set-lbl">Descanso</div></div>
+        </div>
+        <div class="steps-lbl">Ejecución paso a paso:</div>
+        <div class="paso"><div class="paso-n p">1</div><div class="paso-t">Sentado en el suelo, rodillas dobladas, cuerpo inclinado hacia atrás ~45°. Sostén la mancuerna con ambas manos.</div></div>
+        <div class="paso"><div class="paso-n p">2</div><div class="paso-t"><strong>Rota el torso</strong> llevando la mancuerna a la derecha hasta casi tocar el suelo. Luego a la izquierda. = 1 rep.</div></div>
+        <div class="paso"><div class="paso-n p">3</div><div class="paso-t">Pies en el suelo para empezar. Pies levantados para mayor dificultad.</div></div>
+        <div class="tip">✅ El movimiento viene del torso, no solo de los brazos. Mira la mancuerna mientras rotas.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESIÓN -->
+  <div id="rutina-prog" class="rutina">
+    <div class="sci">📈 <strong>Principio de sobrecarga progresiva:</strong> Para que el músculo crezca y mejore la insulina, debe recibir un estímulo mayor cada semana. Aumenta peso cuando puedas completar todas las series con buena técnica y sin dolor.</div>
+
+    <div class="prog">
+      <h4>🟢 Semanas 1–3: Adaptación</h4>
+      <p>Aprende los movimientos. Cargas bajas. Barra sola (8kg) en sentadilla y peso muerto. Kettlebell 8kg en swings. Mancuernas 2.5kg. <strong>Prioridad: técnica perfecta antes que peso.</strong></p>
+    </div>
+    <div class="prog">
+      <h4>🟡 Semanas 4–6: Carga Progresiva</h4>
+      <p>Cuando completes 3×12 bien, agrega 5kg a la barra. Kettlebell swing a 2 manos. Mancuernas 2.8kg. Agrega 1 rep por semana si no puedes agregar peso todavía.</p>
+    </div>
+    <div class="prog">
+      <h4>🔴 Semanas 7–12: Fuerza Funcional</h4>
+      <p>Con las nuevas pesas que lleguen, aumenta progresivamente. Barra hasta 28kg en sentadilla y peso muerto. Pasa a 4 series cuando 3 se sientan fáciles.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-t">📊 Tabla de progresión de pesos</div>
+      <table class="week-t">
+        <tr><th>Ejercicio</th><th>Sem 1–3</th><th>Sem 4–6</th><th>Sem 7–12</th></tr>
+        <tr><td>Sentadilla</td><td>8kg</td><td>13–18kg</td><td>18–28kg</td></tr>
+        <tr><td>Peso muerto</td><td>8kg</td><td>18kg</td><td>18–28kg</td></tr>
+        <tr><td>Hip thrust</td><td>8kg</td><td>13–18kg</td><td>18–28kg</td></tr>
+        <tr><td>Press banca</td><td>8kg</td><td>13kg</td><td>18kg+</td></tr>
+        <tr><td>KB Swing</td><td>8kg ×1</td><td>8kg ×2</td><td>8kg ×2</td></tr>
+        <tr><td>Mancuernas</td><td>2.5kg</td><td>2.8kg</td><td>+nuevas</td></tr>
+      </table>
+    </div>
+
+    <div class="box-g">🎯 <strong>Meta 12 semanas:</strong> Glucosa &lt;100 mg/dL · Colesterol &lt;200 · Ganancia 2–3kg músculo · Cintura –3–5cm. Con cardio diario + fuerza 3x/sem + plan IESS es completamente alcanzable.</div>
+  </div>
+
+</div>
+
+<script>
+function showRutina(id, btn) {
+  document.querySelectorAll('.rutina').forEach(r => r.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('rutina-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>

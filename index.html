@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#16a34a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi Plan">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Plan Nutricional · José</title>
+<style>
+:root {
+  --bg:#f8fafc; --card:#fff; --border:#e2e8f0;
+  --green:#16a34a; --green-l:#dcfce7; --green-t:#14532d;
+  --blue:#2563eb; --blue-l:#dbeafe; --blue-t:#1e3a8a;
+  --yellow:#d97706; --yellow-l:#fef3c7; --yellow-t:#92400e;
+  --red:#dc2626; --red-l:#fee2e2; --red-t:#7f1d1d;
+  --purple:#7c3aed; --purple-l:#ede9fe; --purple-t:#4c1d95;
+  --orange:#ea580c; --orange-l:#ffedd5; --orange-t:#7c2d12;
+  --text:#0f172a; --text2:#475569; --text3:#94a3b8;
+  --shadow:0 1px 3px rgba(0,0,0,.08);
+  --r:16px; --r-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+
+/* HEADER */
+.hdr{background:#fff;border-bottom:1px solid var(--border);padding:10px 16px 0;flex-shrink:0;padding-top:max(10px,env(safe-area-inset-top));box-shadow:var(--shadow)}
+.hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.logo{width:34px;height:34px;background:linear-gradient(135deg,#16a34a,#22c55e);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.logo-t{font-size:16px;font-weight:800;color:var(--text);line-height:1.1}
+.logo-s{font-size:10px;color:var(--text3)}
+.pills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px}
+.pill{display:flex;align-items:center;gap:3px;padding:4px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.pill-g{background:var(--green-l);color:var(--green-t)}
+.pill-y{background:var(--yellow-l);color:var(--yellow-t)}
+.pill-r{background:var(--red-l);color:var(--red-t)}
+.nav{display:flex;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{flex-shrink:0;padding:9px 12px;font-size:11.5px;font-weight:500;border:none;cursor:pointer;background:transparent;color:var(--text3);border-bottom:2.5px solid transparent;white-space:nowrap}
+.nav-btn.active{color:var(--green);border-bottom-color:var(--green);font-weight:700}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:14px;padding-bottom:max(20px,env(safe-area-inset-bottom));background:var(--bg)}
+.page{display:none}.page.active{display:block}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--r);padding:15px;margin-bottom:11px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.card-t{font-size:14px;font-weight:700;color:var(--text);margin-bottom:11px;display:flex;align-items:center;gap:6px}
+
+/* METRICS */
+.m-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
+.m{background:var(--card);border-radius:var(--r-sm);padding:10px 7px;text-align:center;box-shadow:var(--shadow);border:1px solid var(--border)}
+.m-v{font-size:18px;font-weight:800;line-height:1}
+.m-v.g{color:var(--green)}.m-v.y{color:var(--yellow)}.m-v.r{color:var(--red)}
+.m-l{font-size:10px;color:var(--text3);margin-top:2px;line-height:1.3}
+.m-c{font-size:10px;margin-top:2px;font-weight:600}
+
+/* MEALS */
+.meal{padding:10px 0;border-bottom:1px solid var(--border)}
+.meal:last-child{border-bottom:none;padding-bottom:0}
+.meal-t{font-size:11px;font-weight:700;color:var(--green);margin-bottom:3px;letter-spacing:.02em}
+.meal-h{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.meal-d{font-size:12.5px;color:var(--text2);line-height:1.7}
+.meal-d strong{color:var(--text);font-weight:600}
+
+/* BOXES */
+.box{border-radius:var(--r-sm);padding:10px 12px;margin-bottom:9px;font-size:12.5px;line-height:1.6;font-weight:500}
+.box-r{background:var(--red-l);color:var(--red-t)}
+.box-g{background:var(--green-l);color:var(--green-t)}
+.box-y{background:var(--yellow-l);color:var(--yellow-t)}
+.box-b{background:var(--blue-l);color:var(--blue-t)}
+.box-p{background:var(--purple-l);color:var(--purple-t)}
+.box-o{background:var(--orange-l);color:var(--orange-t)}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 8px;border-radius:12px}
+.b-run{background:var(--green-l);color:var(--green-t)}
+.b-bike{background:var(--blue-l);color:var(--blue-t)}
+.b-fartlek{background:var(--yellow-l);color:var(--yellow-t)}
+.b-fuerza{background:var(--orange-l);color:var(--orange-t)}
+.b-rest{background:#f1f5f9;color:var(--text3)}
+
+/* DAY ACCORDION */
+.day{background:var(--card);border-radius:var(--r);margin-bottom:9px;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden}
+.day-h{padding:13px 15px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;-webkit-user-select:none;user-select:none}
+.day-l{display:flex;flex-direction:column;gap:5px}
+.day-n{font-size:14px;font-weight:700;color:var(--text)}
+.chev{font-size:13px;color:var(--text3);transition:transform .2s;font-weight:700}
+.day.open .chev{transform:rotate(180deg)}
+.day-b{display:none;padding:4px 15px 13px;border-top:1px solid var(--border)}
+.day.open .day-b{display:block}
+
+/* EXERCISE CARDS */
+.ex-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.ex-card{background:var(--orange-l);border:1px solid #fed7aa;border-radius:var(--r-sm);padding:10px;text-align:center}
+.ex-icon{font-size:28px;margin-bottom:5px}
+.ex-name{font-size:12px;font-weight:700;color:var(--orange-t);margin-bottom:3px;line-height:1.3}
+.ex-detail{font-size:11px;color:#9a3412;line-height:1.5}
+.ex-card.blue{background:var(--blue-l);border-color:#bfdbfe}
+.ex-card.blue .ex-name{color:var(--blue-t)}
+.ex-card.blue .ex-detail{color:#1e40af}
+.ex-card.green{background:var(--green-l);border-color:#bbf7d0}
+.ex-card.green .ex-name{color:var(--green-t)}
+.ex-card.green .ex-detail{color:#166534}
+.ex-card.purple{background:var(--purple-l);border-color:#ddd6fe}
+.ex-card.purple .ex-name{color:var(--purple-t)}
+.ex-card.purple .ex-detail{color:#5b21b6}
+
+/* CHANGES */
+.chg{display:flex;gap:9px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.chg:last-child{border-bottom:none}
+.chg-i{font-size:17px;flex-shrink:0;margin-top:1px}
+.chg-b{font-size:13px;color:var(--text2);line-height:1.6}
+.chg-b strong{color:var(--text);font-weight:700;display:block;margin-bottom:2px}
+
+/* FOOD TABLE */
+.ft{width:100%;border-collapse:collapse;font-size:12px}
+.ft th{text-align:left;color:var(--text3);font-weight:700;padding:6px 5px;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;letter-spacing:.05em}
+.ft td{padding:8px 5px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+.ft tr:last-child td{border-bottom:none}
+.ft td:first-child{font-weight:700;color:var(--green);min-width:75px;font-size:11px}
+
+/* CHIPS */
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.chip{padding:8px 9px;border-radius:var(--r-sm);font-size:12px;line-height:1.4;font-weight:500}
+.chip-r{background:var(--red-l);color:var(--red-t)}
+.chip-g{background:var(--green-l);color:var(--green-t)}
+.chip-y{background:var(--yellow-l);color:var(--yellow-t)}
+.chip-o{background:var(--orange-l);color:var(--orange-t)}
+
+/* TIPS */
+.tip{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--border)}
+.tip:last-child{border-bottom:none}
+.tip-n{font-size:13px;font-weight:800;color:var(--green);min-width:22px}
+.tip-t{font-size:13px;color:var(--text2);line-height:1.6}
+.tip-t strong{color:var(--text);font-weight:600}
+
+/* STEPS */
+.step{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step-n{display:inline-flex;width:23px;height:23px;background:var(--green);color:#fff;border-radius:50%;font-size:12px;font-weight:800;align-items:center;justify-content:center;flex-shrink:0}
+.step-t{font-size:13px;color:var(--text2);line-height:1.6;padding-top:2px}
+.step-t strong{color:var(--text);font-weight:600}
+
+/* PROGRESS */
+.prog-bar{background:#e2e8f0;border-radius:8px;height:10px;overflow:hidden;margin:5px 0}
+.prog-fill{height:100%;border-radius:8px}
+
+/* DETOX HERO */
+.detox-hero{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border:1px solid #6ee7b7;border-radius:var(--r);padding:15px;margin-bottom:11px}
+.detox-hero h2{font-size:15px;font-weight:800;color:var(--green-t);margin-bottom:4px}
+.detox-hero p{font-size:13px;color:#065f46;line-height:1.6}
+
+/* FUERZA HERO */
+.fuerza-hero{background:linear-gradient(135deg,#ffedd5,#fed7aa);border:1px solid #fb923c;border-radius:var(--r);padding:15px;margin-bottom:11px}
+.fuerza-hero h2{font-size:15px;font-weight:800;color:var(--orange-t);margin-bottom:4px}
+.fuerza-hero p{font-size:13px;color:#7c2d12;line-height:1.6}
+
+.sec-l{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin:13px 0 7px}
+ul.plain{list-style:none;padding:0}
+ul.plain li{font-size:13px;color:var(--text2);line-height:1.9;padding-left:15px;position:relative}
+ul.plain li::before{content:'→';position:absolute;left:0;color:var(--green);font-size:11px;top:3px;font-weight:700}
+
+/* SEMANA FUERZA TABLE */
+.week-table{width:100%;border-collapse:collapse;font-size:12px}
+.week-table th{background:#f8fafc;padding:8px 6px;text-align:center;border:1px solid var(--border);font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text3)}
+.week-table td{padding:8px 6px;border:1px solid var(--border);text-align:center;font-size:11.5px;color:var(--text2);vertical-align:top;line-height:1.5}
+.week-table td.cardio{background:#f0fdf4;color:var(--green-t);font-weight:600}
+.week-table td.fuerza{background:#fff7ed;color:var(--orange-t);font-weight:600}
+.week-table td.rest{background:#f8fafc;color:var(--text3)}
+.week-table td.combo{background:#ede9fe;color:var(--purple-t);font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div class="hdr-top">
+      <div class="logo">🥗</div>
+      <div>
+        <div class="logo-t">Plan Integral · José</div>
+        <div class="logo-s">IESS Sangolquí · Jun 2026</div>
+      </div>
+    </div>
+    <div class="pills">
+      <div class="pill pill-g">✅ Trig. 88</div>
+      <div class="pill pill-y">⚠️ Col. 223</div>
+      <div class="pill pill-r">🔴 Gluc. 132</div>
+    </div>
+    <div class="nav">
+      <button class="nav-btn active" onclick="showPage('hoy',this)">Hoy</button>
+      <button class="nav-btn" onclick="showPage('semana',this)">Semana</button>
+      <button class="nav-btn" onclick="window.location.href='fuerza.html'">💪 Fuerza</button>
+      <button class="nav-btn" onclick="showPage('detox',this)">Detox</button>
+      <button class="nav-btn" onclick="showPage('plato',this)">Mi Plato</button>
+      <button class="nav-btn" onclick="showPage('alimentos',this)">Guía</button>
+      <button class="nav-btn" onclick="showPage('reglas',this)">Reglas</button>
+      <button class="nav-btn" onclick="showPage('salud',this)">Salud</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- HOY -->
+    <div id="hoy" class="page active">
+      <div class="m-row">
+        <div class="m"><div class="m-v g">88</div><div class="m-l">Triglicéridos</div><div class="m-c" style="color:var(--green)">✅ Normal</div></div>
+        <div class="m"><div class="m-v y">223</div><div class="m-l">Colesterol</div><div class="m-c" style="color:var(--yellow)">⚠️ Alto</div></div>
+        <div class="m"><div class="m-v r">132</div><div class="m-l">Glucosa</div><div class="m-c" style="color:var(--red)">🔴 Alta</div></div>
+      </div>
+      <div class="box box-p">🏅 ¡Triglicéridos normalizados! Bajaron de alto a 88. Ahora el foco es glucosa y colesterol. El plan de fuerza acelerará la mejora de insulina.</div>
+
+      <div class="card">
+        <div class="card-t">🌙 04:45 — Pre-entreno</div>
+        <div class="meal">
+          <div class="meal-t">SIN DÁTIL NI BANANO — INDICACIÓN NUTRICIONISTA</div>
+          <div class="meal-h">Manzana verde pequeña + agua aromática</div>
+          <div class="meal-d">IG bajo (38) — no dispara glucosa antes del ejercicio<br>Evidencia: Dr. David Ludwig (Harvard) — frutas IG bajo en prediabéticos</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-t">☀️ Desayuno post-entreno (06:15–07:00)</div>
+        <div class="box box-b">☕ Café: NO antes de entrenar. Sí con el desayuno, sin azúcar, máx 2 tazas. Evitar después de las 14:00.</div>
+        <div class="meal">
+          <div class="meal-t">OPCIÓN A — Lun / Mié / Vie</div>
+          <div class="meal-h">Agua aromática + Verde majado + Huevo + 2 claras</div>
+          <div class="meal-d">Verde majado ½ tz · 1 huevo + 2 claras (nunca frito) · ☕ Café negro</div>
+        </div>
+        <div class="meal">
+          <div class="meal-t">OPCIÓN B — Mar / Jue</div>
+          <div class="meal-h">Ensalada + Aguacate ¼ + Tortilla de yuca + Huevo + 2 claras</div>
+          <div class="meal-d">Aceite oliva ½ cdta · Tortilla yuca ½ tz · ☕ Café negro</div>
+        </div>
+        <div class="meal">
+          <div class="meal-t">OPCIÓN C — NUEVA: Ensalada melloco y tomate</div>
+          <div class="meal-h">Melloco cocido ½ tz + tomate + Huevo + 2 claras</div>
+          <div class="meal-d">Aceite oliva ½ cdta + limón + sal + cilantro · ☕ Café negro<br><strong>Nota:</strong> Si usas esta opción, reduce carbohidrato en almuerzo ese día</div>
+        </div>
+        <div class="meal">
+          <div class="meal-t">OPCIÓN D — NUEVA: Avena + Yogur griego</div>
+          <div class="meal-h">3 cdas avena + Yogur griego natural 150ml + Huevo + 2 claras</div>
+          <div class="meal-d">Mezclar avena + yogur + canela · Yogur griego: más proteína, menos carbo · ☕ Café negro</div>
+        </div>
+        <div class="meal">
+          <div class="meal-t">SÁBADO — Bici 2h (reforzado)</div>
+          <div class="meal-h">Agua + Verde majado + Aguacate ¾ + Huevo + 2 claras</div>
+          <div class="meal-d">☕ Café negro con el desayuno</div>
+        </div>
+        <div class="meal">
+          <div class="meal-t">DOMINGO — Trote 1h30 (recuperación)</div>
+          <div class="meal-h">Agua aromática + Mango de verde + Aguacate + Huevo + 2 claras</div>
+          <div class="meal-d">☕ Café negro con el desayuno</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-t">🍎 10:00 — Media mañana (rotar opciones)</div>
+        <div class="meal">
+          <div class="meal-d">
+            <strong>Op. 1:</strong> Manzana verde + nueces 4–6 und<br>
+            <strong>Op. 2:</strong> Pera + almendras 4–6 und<br>
+            <strong>Op. 3:</strong> Mandarina pequeña (3 und) + nueces 4–6 und<br>
+            <strong>Op. 4:</strong> Kiwi (1 und) + almendras 4–6 und<br>
+            <strong>Op. 5:</strong> Naranja + nueces 10 und<br>
+            <strong>Op. 6:</strong> Frutilla ½ tz + almendras 4–6 und<br>
+            <strong>Op. 7:</strong> Naranjilla ½ tz + nueces 4–6 und<br>
+            <strong>Op. 8:</strong> Chochos con tomate<br>
+            <strong>❌ NO:</strong> banano, plátano, uvas, melón, sandía, piña
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-t">🍽️ 13:30 — Almuerzo</div>
+        <div class="meal">
+          <div class="meal-t">ORDEN OBLIGATORIO: Verduras → Proteína → Carbohidrato</div>
+          <div class="meal-h">50% verduras · 25% proteína · 25% carbohidrato integral</div>
+          <div class="meal-d">
+            <strong>1°</strong> Ensalada 2 tzs (tallo apio, zanahoria, habas, aguacate ¼, aceite oliva)<br>
+            <strong>2°</strong> 90g pollo / pescado / res magra (res máx 1x/sem)<br>
+            <strong>3°</strong> ½ tz arroz integral / quinoa / lentejas / chochos<br>
+            Tomate cocido 2–3x/sem · Agua aromática
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-t">🌆 18:00 — Merienda / Cena</div>
+        <div class="meal">
+          <div class="meal-t">CENA LIGERA — MÍN 2–3H ANTES DE ACOSTARSE</div>
+          <div class="meal-h">Ensalada doble + proteína magra</div>
+          <div class="meal-d">
+            Ensalada con pollo/pescado desmenuzado DOBLE<br>
+            90g proteína · Sin carbohidratos refinados<br>
+            Agua aromática · 🍵 Té verde (reduce LDL)
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-t">💧 Hidratación</div>
+        <div class="meal-d" style="font-size:13px;line-height:2.1">
+          6–8 vasos agua al día · +500ml días de entrenamiento<br>
+          2 tazas té verde/día · Solo stevia para endulzar<br>
+          ❌ Sin azúcar, jugos, gaseosas, alcohol
+        </div>
+      </div>
+    </div>
+
+    <!-- SEMANA -->
+    <div id="semana" class="page">
+      <div class="box box-b" style="margin-bottom:12px">Toca cada día para ver detalle · 💪 = incluye fuerza ese día</div>
+
+      <div class="day" onclick="togDay(this)">
+        <div class="day-h">
+          <div class="day-l"><div class="day-n">Lunes</div><div style="display:flex;gap:5px;flex-wrap:wrap"><span class="badge b-run">🏃 Trote 45min Z2</span><span class="badge b-fuerza">💪 Fuerza A</span></div></div>
+          <span class="chev">▾</span>
+        </div>
+        <div class="day-b">
+          <div class="meal"><div class="meal-t">04:45</div><div class="meal-d">Manzana verde + agua</div></div>
+          <div class="meal"><div class="meal-t">05:00 Trote 45min Z2</div><div class="meal-d">Ritmo conversacional · Zona 2</div></div>
+          <div class="meal"><div class="meal-t">06:00 💪 Fuerza A (30 min)</div><div class="meal-d">Tren inferior + Core · Ver pestaña Fuerza</div></div>
+          <div class="meal"><div class="meal-t">06:45 Desayuno</div><div class="meal-d">Agua aromática + Verde majado + Huevo + 2 claras + ☕</div></div>
+          <div class="meal"><div class="meal-t">10:00</div><div class="meal-d">Manzana verde + nueces 4–6 und</div></div>
+          <div class="meal"><div class="meal-t">13:30 Almuerzo</div><div class="meal-d">Ensalada → Pollo 90g → Lentejas ½ tz · Tomate cocido</div></div>
+          <div class="meal"><div class="meal-t">18:00 Cena</div><div class="meal-d">Ensalada + pescado desmenuzado DOBLE · Agua aromática</div></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="togDay(this)">
+        <div class="day-h">
+          <div class="day-l"><div class="day-n">Martes</div><span class="badge b-bike">🚴 Bici 1h</span></div>
+          <span class="chev">▾</span>
+        </div>
+        <div class="day-b">
+          <div class="meal"><div class="meal-t">04:45</div><div class="meal-d">Manzana verde + agua (bici exige más glucógeno)</div></div>
+          <div class="meal"><div class="meal-t">05:00 Bicicleta 1h</div><div class="meal-d">~14km · Ritmo moderado</div></div>
+          <div class="meal"><div class="meal-t">06:15 Desayuno</div><div class="meal-d">Ensalada + Aguacate ¼ + Tortilla yuca + Huevo + 2 claras + ☕</div></div>
+          <div class="meal"><div class="meal-t">10:00</div><div class="meal-d">Pera + almendras 4–6 und</div></div>
+          <div class="meal"><div class="meal-t">13:30 Almuerzo</div><div class="meal-d">Ensalada → Pescado 90g → Quinoa ½ tz</div></div>
+          <div class="meal"><div class="meal-t">18:00 Cena</div><div class="meal-d">Ensalada + pollo doble estofado · Agua aromática</div></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="togDay(this)">
+        <div class="day-h">
+          <div class="day-l"><div class="day-n">Miércoles</div><div style="display:flex;gap:5px;flex-wrap:wrap"><span class="badge b-fartlek">⚡ Fartlek</span><span class="badge b-fuerza">💪 Fuerza B</span></div></div>
+          <span class="chev">▾</span>
+        </div>
+        <div class="day-b">
+          <div class="box box-y" style="margin-top:10px;font-size:12px">Fartlek + Fuerza = día exigente. Pre-entreno obligatorio. Proteína extra en cena.</div>
+          <div class="meal"><div class="meal-t">04:45</div><div class="meal-d">Manzana verde + agua aromática</div></div>
+          <div class="meal"><div class="meal-t">05:00 Fartlek</div><div class="meal-d">Cambios de ritmo · Alta intensidad</div></div>
+          <div class="meal"><div class="meal-t">06:00 💪 Fuerza B (30 min)</div><div class="meal-d">Tren superior + Core · Ver pestaña Fuerza</div></div>
+          <div class="meal"><div class="meal-t">06:45 Desayuno (reforzado)</div><div class="meal-d">3 cdas avena + Yogur griego + Huevo + 2 claras + ☕</div></div>
+          <div class="meal"><div class="meal-t">10:00</div><div class="meal-d">Mandarina (3 und) + nueces 4–6 und</div></div>
+          <div class="meal"><div class="meal-t">13:30 Almuerzo</div><div class="meal-d">Ensalada → Pollo/pavo 90g → Arroz integral ½ tz</div></div>
+          <div class="meal"><div class="meal-t">18:00 Cena</div><div class="meal-d">Ensalada champiñones + pollo doble + aguacate · Agua aromática</div></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="togDay(this)">
+        <div class="day-h">
+          <div class="day-l"><div class="day-n">Jueves</div><span class="badge b-bike">🚴 Bici 1h</span></div>
+          <span class="chev">▾</span>
+        </div>
+        <div class="day-b">
+          <div class="meal"><div class="meal-t">04:45</div><div class="meal-d">Manzana verde + agua</div></div>
+          <div class="meal"><div class="meal-t">05:00 Bicicleta 1h</div><div class="meal-d">~14km · Ritmo moderado</div></div>
+          <div class="meal"><div class="meal-t">06:15 Desayuno</div><div class="meal-d">Ensalada melloco-tomate + Huevo + 2 claras + ☕</div></div>
+          <div class="meal"><div class="meal-t">10:00</div><div class="meal-d">Kiwi + almendras 4–6 und</div></div>
+          <div class="meal"><div class="meal-t">13:30 Almuerzo</div><div class="meal-d">Ensalada → Res magra 90g (1x/sem) → Fréjol ½ tz</div></div>
+          <div class="meal"><div class="meal-t">18:00 Cena</div><div class="meal-d">Sopa verduras + atún en agua + espinaca · Agua aromática</div></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="togDay(this)">
+        <div class="day-h">
+          <div class="day-l"><div class="day-n">Viernes</div><div style="display:flex;gap:5px;flex-wrap:wrap"><span class="badge b-run">🏃 Trote 45min Z2</span><span class="badge b-fuerza">💪 Fuerza A</span></div></div>
+          <span class="chev">▾</span>
+        </div>
+        <div class="day-b">
+          <div class="meal"><div class="meal-t">04:45</div><div class="meal-d">Manzana verde + agua</div></div>
+          <div class="meal"><div class="meal-t">05:00 Trote 45min Z2</div><div class="meal-d">Ritmo suave · Preparar para sábado largo</div></div>
+          <div class="meal"><div class="meal-t">06:00 💪 Fuerza A (30 min)</div><div class="meal-d">Tren inferior + Core · Ver pestaña Fuerza</div></div>
+          <div class="meal"><div class="meal-t">06:45 Desayuno</div><div class="meal-d">Agua aromática + Verde majado + Huevo + 2 claras + ☕</div></div>
+          <div class="meal"><div class="meal-t">10:00</div><div class="meal-d">Frutilla ½ tz + almendras 4–6 und</div></div>
+          <div class="meal"><div class="meal-t">13:30 Almuerzo</div><div class="meal-d">Ensalada → Pollo/pescado 90g → Quinoa</div></div>
+          <div class="meal"><div class="meal-t">18:00 Cena</div><div class="meal-d">Cena temprana ligera: ensalada + sardinas + semillas · Agua</div></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="togDay(this)">
+        <div class="day-h">
+          <div class="day-l"><div class="day-n">Sábado</div><span class="badge b-bike">🚴 Bici 2h · +300kcal</span></div>
+          <span class="chev">▾</span>
+        </div>
+        <div class="day-b">
+          <div class="meal"><div class="meal-t">Antes de salir</div><div class="meal-d">Manzana verde + agua (obligatorio para 2h)</div></div>
+          <div class="meal"><div class="meal-t">Desayuno reforzado</div><div class="meal-d">Agua + Verde majado + Aguacate ¾ + Huevo + 2 claras + ☕</div></div>
+          <div class="meal"><div class="meal-t">En ruta cada 50 min</div><div class="meal-d">Manzana verde o claudia + agua</div></div>
+          <div class="meal"><div class="meal-t">Post-bici 30 min</div><div class="meal-d">Yogur griego + fruta permitida</div></div>
+          <div class="meal"><div class="meal-t">Almuerzo</div><div class="meal-d">Chochos + tomate + aguacate · Pollo 90g · Ensalada grande</div></div>
+          <div class="meal"><div class="meal-t">Cena</div><div class="meal-d">Ligera compensatoria: proteína + verduras · Agua</div></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="togDay(this)">
+        <div class="day-h">
+          <div class="day-l"><div class="day-n">Domingo</div><span class="badge b-run">🏃 Trote 1h30</span></div>
+          <span class="chev">▾</span>
+        </div>
+        <div class="day-b">
+          <div class="meal"><div class="meal-t">Pre-salida</div><div class="meal-d">Manzana verde + agua (1h30 requiere glucógeno)</div></div>
+          <div class="meal"><div class="meal-t">Desayuno post-trote</div><div class="meal-d">Agua + Mango de verde + Aguacate + Huevo + 2 claras + ☕</div></div>
+          <div class="meal"><div class="meal-t">Media mañana</div><div class="meal-d">Verduras picadas + almendras + nueces</div></div>
+          <div class="meal"><div class="meal-t">Almuerzo</div><div class="meal-d">Pescado 90g + ensalada + quinoa ½ tz · Agua</div></div>
+          <div class="meal"><div class="meal-t">Cena</div><div class="meal-d">Ensalada + pollo doble + Agua aromática</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FUERZA -->
+    <div id="fuerza" class="page">
+      <div class="fuerza-hero">
+        <h2>💪 Plan de Fuerza — Control de Insulina</h2>
+        <p>Diseñado por evidencia científica de Dr. Stuart Phillips (McMaster) y Dr. Laurie Goodyear (Harvard Medical School). El músculo es el órgano más importante para captar glucosa y mejorar sensibilidad a insulina.</p>
+      </div>
+
+      <div class="box box-o">🔬 <strong>¿Por qué la fuerza mejora la insulina?</strong> Cada kg de músculo ganado capta hasta 25g de glucosa adicional por día. 3 sesiones/semana reducen HbA1c hasta 0.6% en 12 semanas (JAMA 2023).</div>
+
+      <div class="card">
+        <div class="card-t">🏋️ Tu equipamiento disponible</div>
+        <div class="chips">
+          <div class="chip chip-o">Barra olímpica 8kg + 2x10kg = 28kg</div>
+          <div class="chip chip-o">2 Kettlebells 8kg c/u</div>
+          <div class="chip chip-o">Mancuernas 2x2.5kg + 2x2.8kg</div>
+          <div class="chip chip-o">Ligas elásticas</div>
+          <div class="chip chip-o">Pelota grande (Fitball)</div>
+          <div class="chip chip-o">Elíptica + Bici estática</div>
+          <div class="chip chip-g">🔜 Más pesas próximamente</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-t">📅 Distribución semanal</div>
+        <table class="week-table">
+          <tr><th>Día</th><th>Cardio</th><th>Fuerza</th></tr>
+          <tr><td>Lunes</td><td class="cardio">Trote Z2 45min</td><td class="fuerza">Fuerza A · 30min</td></tr>
+          <tr><td>Martes</td><td class="cardio">Bici 1h</td><td class="rest">Descanso fuerza</td></tr>
+          <tr><td>Miércoles</td><td class="cardio">Fartlek</td><td class="fuerza">Fuerza B · 30min</td></tr>
+          <tr><td>Jueves</td><td class="cardio">Bici 1h</td><td class="rest">Descanso fuerza</td></tr>
+          <tr><td>Viernes</td><td class="cardio">Trote Z2 45min</td><td class="fuerza">Fuerza A · 30min</td></tr>
+          <tr><td>Sábado</td><td class="cardio">Bici 2h</td><td class="rest">Descanso fuerza</td></tr>
+          <tr><td>Domingo</td><td class="cardio">Trote 1h30</td><td class="rest">Descanso total</td></tr>
+        </table>
+        <p style="font-size:11px;color:var(--text3);margin-top:8px;">Fuerza A = Lunes y Viernes · Fuerza B = Miércoles · Después del cardio, antes del desayuno</p>
+      </div>
+
+      <!-- FUERZA A -->
+      <div class="day" onclick="togDay(this)">
+        <div class="day-h">
+          <div class="day-l">
+            <div class="day-n">💪 Rutina A — Tren Inferior + Core</div>
+            <span class="badge b-fuerza">Lunes y Viernes · 30 min</span>
+          </div>
+          <span class="chev">▾</span>
+        </div>
+        <div class="day-b">
+          <div class="box box-o" style="margin-top:10px;font-size:12px">Calentar 3 min: marcha en el lugar + rotación de caderas</div>
+
+          <div class="sec-l">Bloque 1 — Piernas (músculos más grandes = más glucosa captada)</div>
+          <div class="ex-grid">
+            <div class="ex-card">
+              <div class="ex-icon">🏋️</div>
+              <div class="ex-name">Sentadilla con barra</div>
+              <div class="ex-detail">Barra 8kg (inicio)<br>3 series × 12 reps<br>Descanso 60 seg<br>Progresión: +5kg/semana</div>
+            </div>
+            <div class="ex-card">
+              <div class="ex-icon">🦵</div>
+              <div class="ex-name">Zancadas con kettlebell</div>
+              <div class="ex-detail">1 kettlebell 8kg<br>3 series × 10 reps/pierna<br>Descanso 60 seg<br>Alternas adelante</div>
+            </div>
+            <div class="ex-card">
+              <div class="ex-icon">🍑</div>
+              <div class="ex-name">Hip Thrust con barra</div>
+              <div class="ex-detail">Barra 8–18kg<br>3 series × 15 reps<br>Descanso 60 seg<br>Glúteo máximo</div>
+            </div>
+            <div class="ex-card">
+              <div class="ex-icon">🦶</div>
+              <div class="ex-name">Peso muerto rumano</div>
+              <div class="ex-detail">Barra 18kg<br>3 series × 10 reps<br>Descanso 90 seg<br>Isquiotibiales</div>
+            </div>
+          </div>
+
+          <div class="sec-l">Bloque 2 — Core (estabilidad + glucosa)</div>
+          <div class="ex-grid">
+            <div class="ex-card blue">
+              <div class="ex-icon">🏐</div>
+              <div class="ex-name">Plancha en fitball</div>
+              <div class="ex-detail">Codos en la pelota<br>3 series × 30 seg<br>Descanso 45 seg<br>Core profundo</div>
+            </div>
+            <div class="ex-card blue">
+              <div class="ex-icon">🔄</div>
+              <div class="ex-name">Rollout con fitball</div>
+              <div class="ex-detail">Rodillas en suelo<br>3 series × 10 reps<br>Descanso 45 seg<br>Abdomen completo</div>
+            </div>
+            <div class="ex-card blue">
+              <div class="ex-icon">🦵</div>
+              <div class="ex-name">Puente de glúteo</div>
+              <div class="ex-detail">Con liga elástica<br>3 series × 20 reps<br>Descanso 45 seg<br>Glúteo + isquio</div>
+            </div>
+            <div class="ex-card blue">
+              <div class="ex-icon">⚡</div>
+              <div class="ex-name">Kettlebell Swing</div>
+              <div class="ex-detail">1 kettlebell 8kg<br>3 series × 15 reps<br>Descanso 60 seg<br>Cardio + fuerza</div>
+            </div>
+          </div>
+
+          <div class="box box-g" style="margin-top:10px">✅ Total: ~28 minutos · Ideal post-cardio. Tomar proteína (huevo + yogur) dentro de los 30 min siguientes.</div>
+        </div>
+      </div>
+
+      <!-- FUERZA B -->
+      <div class="day" onclick="togDay(this)">
+        <div class="day-h">
+          <div class="day-l">
+            <div class="day-n">💪 Rutina B — Tren Superior + Core</div>
+            <span class="badge b-fuerza">Miércoles · 30 min</span>
+          </div>
+          <span class="chev">▾</span>
+        </div>
+        <div class="day-b">
+          <div class="box box-o" style="margin-top:10px;font-size:12px">Calentar 3 min: círculos de hombros + rotación de tronco</div>
+
+          <div class="sec-l">Bloque 1 — Pecho y espalda</div>
+          <div class="ex-grid">
+            <div class="ex-card">
+              <div class="ex-icon">🤸</div>
+              <div class="ex-name">Press banca con barra</div>
+              <div class="ex-detail">Barra 8–18kg<br>3 series × 10 reps<br>Descanso 60 seg<br>Pecho completo</div>
+            </div>
+            <div class="ex-card">
+              <div class="ex-icon">🏋️</div>
+              <div class="ex-name">Remo con kettlebell</div>
+              <div class="ex-detail">1 kettlebell 8kg/brazo<br>3 series × 12 reps<br>Descanso 60 seg<br>Espalda + bíceps</div>
+            </div>
+            <div class="ex-card">
+              <div class="ex-icon">💪</div>
+              <div class="ex-name">Press hombro mancuerna</div>
+              <div class="ex-detail">2 mancuernas 2.5kg<br>3 series × 12 reps<br>Descanso 60 seg<br>Hombros + tríceps</div>
+            </div>
+            <div class="ex-card">
+              <div class="ex-icon">🔗</div>
+              <div class="ex-name">Curl bíceps con liga</div>
+              <div class="ex-detail">Liga resistencia media<br>3 series × 15 reps<br>Descanso 45 seg<br>Bíceps</div>
+            </div>
+          </div>
+
+          <div class="sec-l">Bloque 2 — Core y estabilidad</div>
+          <div class="ex-grid">
+            <div class="ex-card green">
+              <div class="ex-icon">🏐</div>
+              <div class="ex-name">Crunch en fitball</div>
+              <div class="ex-detail">Espalda sobre pelota<br>3 series × 15 reps<br>Descanso 45 seg<br>Abdomen superior</div>
+            </div>
+            <div class="ex-card green">
+              <div class="ex-icon">🔄</div>
+              <div class="ex-name">Rotación rusa mancuerna</div>
+              <div class="ex-detail">1 mancuerna 2.5kg<br>3 series × 20 reps<br>Descanso 45 seg<br>Oblicuos</div>
+            </div>
+            <div class="ex-card green">
+              <div class="ex-icon">⬆️</div>
+              <div class="ex-name">Press Arnold sentado</div>
+              <div class="ex-detail">2 mancuernas 2.5kg<br>3 series × 10 reps<br>Descanso 60 seg<br>Hombros completos</div>
+            </div>
+            <div class="ex-card green">
+              <div class="ex-icon">🏋️</div>
+              <div class="ex-name">Kettlebell halo</div>
+              <div class="ex-detail">1 kettlebell 8kg<br>3 series × 10 reps<br>Descanso 45 seg<br>Core + hombros</div>
+            </div>
+          </div>
+
+          <div class="box box-g" style="margin-top:10px">✅ Total: ~28 minutos · Recuperación: proteína + avena + yogur griego en desayuno post-entreno.</div>
+        </div>
+      </div>
+
+      <!-- PROGRESIÓN -->
+      <div class="card">
+        <div class="card-t">📈 Progresión por fases</div>
+        <div class="step"><div class="step-n">1</div><div class="step-t"><strong>Semanas 1–3 (adaptación):</strong> Cargas bajas, técnica perfecta. Barra 8kg en sentadilla y peso muerto. Kettlebell 8kg en swings y remo. Aprender el movimiento.</div></div>
+        <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Semanas 4–6 (carga progresiva):</strong> Aumentar 5kg en barra cuando completes 3×12 con buena técnica. Añadir discos: barra 18kg → 28kg progresivamente.</div></div>
+        <div class="step"><div class="step-n">3</div><div class="step-t"><strong>Semanas 7–12 (fuerza funcional):</strong> Con las nuevas pesas que lleguen, aumentar mancuernas. Kettlebell swing a 2 manos. Aumentar volumen (4 series).</div></div>
+        <div class="step"><div class="step-n">4</div><div class="step-t"><strong>Meta 3 meses:</strong> Glucosa en ayunas &lt;100 · Reducción visible de cintura · Más energía diaria · HbA1c mejorada en exámenes.</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-t">🍽️ Nutrición pre y post fuerza</div>
+        <div class="chg"><div class="chg-i">⚡</div><div class="chg-b"><strong>Antes (15 min):</strong> Manzana verde — ya lo tienes como pre-entreno. Perfecto también para la fuerza.</div></div>
+        <div class="chg"><div class="chg-i">🥚</div><div class="chg-b"><strong>Después (máx 30 min):</strong> Huevo + 2 claras + yogur griego = proteína completa para reconstruir músculo. Tu desayuno actual es ideal.</div></div>
+        <div class="chg"><div class="chg-i">💧</div><div class="chg-b"><strong>Durante:</strong> Agua sola, sin bebidas deportivas — tu sesión de 30 min no requiere electrolitos extra.</div></div>
+        <div class="chg"><div class="chg-i">🌙</div><div class="chg-b"><strong>Cena días de fuerza:</strong> Proteína extra — añade 1 huevo o 30g queso fresco a la ensalada nocturna para recuperación muscular nocturna.</div></div>
+      </div>
+
+      <div class="box box-p">🧬 <strong>Evidencia científica:</strong> Un estudio del JAMA (2023) demostró que 3 sesiones/semana de fuerza durante 12 semanas reducen la HbA1c en 0.6% en prediabéticos, similar al efecto de metformina, sin medicación.</div>
+    </div>
+
+    <!-- DETOX -->
+    <div id="detox" class="page">
+      <div class="detox-hero">
+        <h2>🌿 Protocolo Detox — Primeros 7 días</h2>
+        <p>Indicado por tu nutricionista IESS para depuración hepática y control glucémico.</p>
+      </div>
+      <div class="card">
+        <div class="card-t">🥤 Jugo Detox (días 1–7 en ayunas)</div>
+        <div class="meal">
+          <div class="meal-t">AL DESPERTAR — ANTES DE ENTRENAR</div>
+          <div class="meal-h">Jugo depurativo</div>
+          <div class="meal-d">1 tallo de apio · 1 manzana verde · 2 cdas linaza molida · ¼ sábila (gel interior) · 150ml agua<br><strong>7 días consecutivos en ayunas</strong></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-t">🥛 Licuado Fase 2 (desde día 8)</div>
+        <div class="meal">
+          <div class="meal-t">EN AYUNAS — REEMPLAZA AL JUGO DETOX</div>
+          <div class="meal-h">Licuado proteico-funcional</div>
+          <div class="meal-d">Agua · 15 frutos secos (nueces o almendras) · 2 sobres gelatina sin sabor · 3 cdas hojuelas avena<br><strong>Licuar todo y tomar en ayunas</strong><br>La gelatina protege cartílagos del running (Dr. Keith Baar, UC Davis)</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-t">📅 Cronograma</div>
+        <div class="step"><div class="step-n">1</div><div class="step-t"><strong>Días 1–7:</strong> Jugo detox (apio + manzana + linaza + aloe + agua) en ayunas</div></div>
+        <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Día 8 en adelante:</strong> Licuado (agua + 15 frutos secos + 2 sobres gelatina + 3 cdas avena)</div></div>
+        <div class="step"><div class="step-n">3</div><div class="step-t"><strong>Siempre:</strong> Manzana verde como pre-entreno físico después del licuado/detox</div></div>
+      </div>
+    </div>
+
+    <!-- MI PLATO -->
+    <div id="plato" class="page">
+      <div class="card">
+        <div class="card-t">🍽️ Estructura del plato saludable (IESS)</div>
+        <div class="chg"><div class="chg-i" style="font-size:22px;color:var(--green);font-weight:800">50%</div><div class="chg-b"><strong>Verduras y hortalizas</strong>Lechuga, espinaca, acelga, brócoli, zanahoria, pepino, tomate, zucchini, pimiento, apio</div></div>
+        <div class="chg"><div class="chg-i" style="font-size:22px;color:var(--blue);font-weight:800">25%</div><div class="chg-b"><strong>Proteína saludable</strong>Pollo sin piel, pescado, huevo — al jugo, estofado, horno o plancha. NUNCA frito.</div></div>
+        <div class="chg"><div class="chg-i" style="font-size:22px;color:var(--yellow);font-weight:800">25%</div><div class="chg-b"><strong>Carbohidrato integral</strong>Arroz integral, quinoa, lentejas, chochos, avena, tubérculos (½ tz)</div></div>
+      </div>
+      <div class="card">
+        <div class="card-t">🥗 Ensalada completa (guía IESS)</div>
+        <div class="step"><div class="step-n">1</div><div class="step-t"><strong>Base verde:</strong> lechuga, espinaca, acelga, berros, rúcula</div></div>
+        <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Verduras o frutas:</strong> tomate, zanahoria, pepino, ají, frutilla</div></div>
+        <div class="step"><div class="step-n">3</div><div class="step-t"><strong>Proteína baja en grasa:</strong> pollo, huevo, atún, pescado</div></div>
+        <div class="step"><div class="step-n">4</div><div class="step-t"><strong>20g semillas o frutos secos:</strong> nueces, almendras, semillas calabaza</div></div>
+        <div class="step"><div class="step-n">5</div><div class="step-t"><strong>Aderezo:</strong> vinagreta, aceite oliva, limón. NUNCA mayonesa ni salsas industriales.</div></div>
+      </div>
+      <div class="card">
+        <div class="card-t">🔄 Cambia estas 4 cosas</div>
+        <div class="chg"><div class="chg-i">❌→✅</div><div class="chg-b"><strong>Mantequilla → Aguacate ¼</strong>Grasa monoinsaturada que sube HDL y baja LDL</div></div>
+        <div class="chg"><div class="chg-i">❌→✅</div><div class="chg-b"><strong>Sour cream → Yogur griego natural</strong>Proteína sin grasa saturada</div></div>
+        <div class="chg"><div class="chg-i">❌→✅</div><div class="chg-b"><strong>Soda → Agua aromática</strong>Elimina 150+ calorías vacías</div></div>
+        <div class="chg"><div class="chg-i">❌→✅</div><div class="chg-b"><strong>Croutones → Nueces 4–6 und</strong>Omega-3 vs carbohidrato refinado</div></div>
+      </div>
+    </div>
+
+    <!-- GUÍA -->
+    <div id="alimentos" class="page">
+      <div class="card">
+        <div class="card-t">📋 Guía alimentaria IESS Sangolquí</div>
+        <table class="ft">
+          <tr><th>Grupo</th><th>Alimentos y porción</th></tr>
+          <tr><td>Lácteos</td><td>Leche descremada 200ml · Yogur natural/griego 150ml · Queso fresco 30g</td></tr>
+          <tr><td>Cereales</td><td>Arroz 150g/½ tz · Quinua · Avena orgánica · Pan integral 1 und · Galletas integrales 3–4 und · NO trigo/cebada/centeno (1 mes)</td></tr>
+          <tr><td>Tubérculos</td><td>Camote, yuca, oca, melloco, zanahoria blanca ½ tz · Papa grande 1 und</td></tr>
+          <tr><td>Carnes</td><td>Pollo/pescado 90g · Res magra 90g (máx 1x/sem) · Huevo 1 und · NUNCA fritos</td></tr>
+          <tr><td>Leguminosas</td><td>Arveja, fréjol, haba, chochos ½ tz (preferir tiernos)</td></tr>
+          <tr><td>Verduras ⭐</td><td>Acelga, brócoli, apio, espinaca, cebolla, col, lechuga, zanahoria, zapallo, tomate, pimiento, zucchini · ½ tz vapor / 1 tz cruda</td></tr>
+          <tr><td>Frutas</td><td>Claudia, mandarina pequeña 3 und · Pera, naranja, kiwi, manzana verde, granadilla, tuna 1 und · Frutilla, naranjilla, mora ½ tz · 1x/sem: uvas, plátano, melón</td></tr>
+          <tr><td>Grasas ⭐</td><td>Aceite oliva 1 cdta · Nueces/almendras 4–6 und · Aguacate ¼ · Linaza 1 cdta</td></tr>
+          <tr><td>Agua</td><td>6–8 vasos al día · Stevia para endulzar</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-t">⭐ Alimentos estrella para tu perfil</div>
+        <div class="chips">
+          <div class="chip chip-g">🐟 Pescado 3–4x/sem</div>
+          <div class="chip chip-g">🥑 Aguacate ¼ (HDL)</div>
+          <div class="chip chip-g">🌰 Nueces (omega-3)</div>
+          <div class="chip chip-g">🌱 Linaza molida</div>
+          <div class="chip chip-g">🥦 Brócoli</div>
+          <div class="chip chip-g">🍵 Té verde 2 tzs</div>
+          <div class="chip chip-g">🍎 Manzana verde</div>
+          <div class="chip chip-g">🫘 Chochos</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-t">❌ Eliminar</div>
+        <div class="chips">
+          <div class="chip chip-r">Pan blanco / harinas</div>
+          <div class="chip chip-r">Arroz blanco</div>
+          <div class="chip chip-r">Azúcar / panela / miel</div>
+          <div class="chip chip-r">Jugos de fruta</div>
+          <div class="chip chip-r">Alcohol</div>
+          <div class="chip chip-r">Frituras</div>
+          <div class="chip chip-r">Embutidos</div>
+          <div class="chip chip-r">Gaseosas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGLAS -->
+    <div id="reglas" class="page">
+      <div class="card">
+        <div class="card-t">📜 Recomendaciones IESS</div>
+        <div class="tip"><div class="tip-n">1</div><div class="tip-t">Horarios fijos de comida — 4–5 comidas balanceadas diarias</div></div>
+        <div class="tip"><div class="tip-n">2</div><div class="tip-t">Masticar bien — come despacio, sin TV ni celular</div></div>
+        <div class="tip"><div class="tip-n">3</div><div class="tip-t">Actividad física 30–60 min diarios (cardio + fuerza)</div></div>
+        <div class="tip"><div class="tip-n">4</div><div class="tip-t">Última comida 2–3h antes de acostarse</div></div>
+        <div class="tip"><div class="tip-n">5</div><div class="tip-t">Carne de res máx 1x/semana · Cerdo y mariscos cada 15 días</div></div>
+        <div class="tip"><div class="tip-n">6</div><div class="tip-t">Evitar fritos siempre — plancha, horno, vapor o estofado</div></div>
+        <div class="tip"><div class="tip-n">7</div><div class="tip-t">Linaza 1 cdta diaria en yogur o avena</div></div>
+        <div class="tip"><div class="tip-n">8</div><div class="tip-t">Solo stevia para endulzar — eliminar azúcar, panela, miel</div></div>
+        <div class="tip"><div class="tip-n">9</div><div class="tip-t">3–4 porciones fruta y 5–6 verdura al día</div></div>
+        <div class="tip"><div class="tip-n">10</div><div class="tip-t">Cocinar más en casa — restaurantes máx cada 15 días</div></div>
+        <div class="tip"><div class="tip-n">11</div><div class="tip-t">Orden en el plato: verduras → proteína → carbohidrato</div></div>
+        <div class="tip"><div class="tip-n">12</div><div class="tip-t">Caminar 10–15 min después del almuerzo (baja glucosa postprandial 22%)</div></div>
+      </div>
+      <div class="card">
+        <div class="card-t">🧠 Para no comer por ansiedad</div>
+        <ul class="plain">
+          <li>Respetar horarios alimenticios estrictamente</li>
+          <li>Tomar agua primero — esperar 10 minutos</li>
+          <li>Caminar o hacer actividad leve</li>
+          <li>No usar pantallas mientras comes</li>
+          <li>Planificar el menú semanal con anticipación</li>
+          <li>Cena siempre ligera — consumir alimentos ligeros si hay ansiedad</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SALUD -->
+    <div id="salud" class="page">
+      <div class="card">
+        <div class="card-t">📊 Tus resultados actuales</div>
+        <div style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px"><span style="font-weight:600">Triglicéridos</span><span style="color:var(--green);font-weight:700">88 ✅ Normal (&lt;150)</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:29%;background:var(--green)"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin:9px 0 3px"><span style="font-weight:600">Colesterol total</span><span style="color:var(--yellow);font-weight:700">223 ⚠️ Alto (&lt;200)</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:74%;background:var(--yellow)"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin:9px 0 3px"><span style="font-weight:600">Glucosa en ayunas</span><span style="color:var(--red);font-weight:700">132 🔴 Alta (&lt;100)</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:88%;background:var(--red)"></div></div>
+        </div>
+      </div>
+      <div class="box box-p">🏅 ¡Logro enorme! Triglicéridos bajaron de alto a 88. El plan funciona. Con el entrenamiento de fuerza añadido, la glucosa e insulina mejorarán en 8–12 semanas.</div>
+      <div class="card">
+        <div class="card-t">🎯 Estrategia glucosa 132 (prioridad #1)</div>
+        <div class="chg"><div class="chg-i">💪</div><div class="chg-b"><strong>Fuerza 3x/semana (NUEVO)</strong>El músculo capta glucosa directamente. Cada sesión reduce glucosa 2–8 mg/dL en las siguientes 24–48h (JAMA 2023).</div></div>
+        <div class="chg"><div class="chg-i">🍎</div><div class="chg-b"><strong>Manzana verde pre-entreno</strong>IG 38 vs IG 62 del banano. Menos impacto glucémico.</div></div>
+        <div class="chg"><div class="chg-i">🥗</div><div class="chg-b"><strong>Orden del plato: verduras → proteína → carbo</strong>Reduce pico glucémico postprandial 30% (Dr. Jessie Inchauspé).</div></div>
+        <div class="chg"><div class="chg-i">🚶</div><div class="chg-b"><strong>Caminar 10–15 min post-almuerzo</strong>Reduce glucosa postprandial 22%.</div></div>
+        <div class="chg"><div class="chg-i">😴</div><div class="chg-b"><strong>Dormir 7–8 horas</strong>El mal sueño eleva cortisol y glucosa basal directamente.</div></div>
+      </div>
+      <div class="card">
+        <div class="card-t">🔬 Exámenes pendientes</div>
+        <ul class="plain">
+          <li>HbA1c (hemoglobina glicosilada)</li>
+          <li>Insulina en ayunas + índice HOMA-IR</li>
+          <li>Colesterol LDL y HDL por separado</li>
+          <li>PSA (antígeno prostático) — anual desde 45 años</li>
+          <li>TSH (tiroides)</li>
+          <li>Repetir perfil lipídico en 3 meses</li>
+        </ul>
+      </div>
+      <div class="box box-g">🎯 Meta 3 meses: Glucosa &lt;100 · Colesterol &lt;200 · Triglicéridos mantener &lt;150. Con cardio diario + fuerza 3x/sem + plan IESS es completamente alcanzable.</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  document.querySelector('.content').scrollTop=0;
+}
+function togDay(el){el.classList.toggle('open')}
+</script>
+</body>
+</html>
