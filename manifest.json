@@ -1,15 +1,16 @@
 {
-  "name": "Plan Nutricional José",
-  "short_name": "Mi Plan",
-  "description": "Plan nutricional y deportivo personalizado",
+  "name": "Plan Integral Jose - Machachi 3.000 m",
+  "short_name": "Plan Jose",
+  "description": "Plan integral 12 semanas: Diabetes T2 debut + HPB + dislipidemia. Nutricion, entrenamiento, suplementos, tracker semanal. Machachi Ecuador 3.000 m.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#16a34a",
+  "theme_color": "#0f766e",
   "orientation": "portrait",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
+
