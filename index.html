@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0f766e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Plan José">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Plan Integral José · Machachi 3.000 m</title>
+<style>
+
+:root{
+  --bg:#f1f5f9;--card:#fff;--border:#e2e8f0;
+  --teal:#0f766e;--teal-l:#ccfbf1;--teal-t:#134e4a;
+  --green:#16a34a;--green-l:#dcfce7;--green-t:#14532d;
+  --blue:#2563eb;--blue-l:#dbeafe;--blue-t:#1e3a8a;
+  --yellow:#d97706;--yellow-l:#fef3c7;--yellow-t:#92400e;
+  --red:#dc2626;--red-l:#fee2e2;--red-t:#7f1d1d;
+  --purple:#7c3aed;--purple-l:#ede9fe;--purple-t:#4c1d95;
+  --orange:#ea580c;--orange-l:#ffedd5;--orange-t:#7c2d12;
+  --text:#0f172a;--text2:#334155;--text3:#64748b;
+  --shadow:0 2px 8px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08);
+  --r:14px;--r-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.55}
+body{overflow-y:auto}
+.app{display:flex;flex-direction:column;min-height:100vh}
+.hdr{background:#fff;border-bottom:2px solid var(--teal);padding:14px 28px 0;flex-shrink:0;padding-top:max(14px,env(safe-area-inset-top));box-shadow:var(--shadow)}
+.hdr-top{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.logo{width:46px;height:46px;background:linear-gradient(135deg,#0f766e,#14b8a6);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;color:#fff;font-weight:800;box-shadow:0 2px 8px rgba(15,118,110,.3)}
+.logo-t{font-size:22px;font-weight:800;color:var(--text);line-height:1.15;letter-spacing:-.01em}
+.logo-s{font-size:13px;color:var(--text3);margin-top:2px;font-weight:500}
+.pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.pill{display:flex;align-items:center;gap:4px;padding:5px 11px;border-radius:20px;font-size:12.5px;font-weight:700}
+.pill-y{background:var(--yellow-l);color:var(--yellow-t)}
+.pill-g{background:var(--green-l);color:var(--green-t)}
+.pill-r{background:var(--red-l);color:var(--red-t)}
+.nav{display:flex;overflow-x:auto;scrollbar-width:none;gap:2px;border-bottom:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{flex-shrink:0;padding:11px 18px;font-size:14px;font-weight:600;border:none;cursor:pointer;background:transparent;color:var(--text3);border-bottom:3px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s}
+.nav-btn:hover{color:var(--teal)}
+.nav-btn.active{color:var(--teal);border-bottom-color:var(--teal);font-weight:800}
+.content{flex:1;overflow-y:visible;padding:24px 28px;padding-bottom:max(40px,env(safe-area-inset-bottom));background:var(--bg);width:100%;max-width:1280px;margin:0 auto}
+@media(min-width:1100px){.content{padding:32px 48px 56px}}
+.page{display:none;animation:fadein .25s ease}.page.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:var(--r);padding:24px;margin-bottom:18px;box-shadow:var(--shadow);border:1px solid var(--border)}
+@media(min-width:900px){.card{padding:28px 32px}}
+.card-t{font-size:18px;font-weight:800;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;letter-spacing:-.01em}
+.m-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.m-row2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+@media(min-width:900px){.m-row,.m-row2{gap:14px}}
+.m{background:var(--card);border-radius:var(--r-sm);padding:14px 10px;text-align:center;box-shadow:var(--shadow);border:1px solid var(--border)}
+.m-v{font-size:24px;font-weight:800;line-height:1.05;letter-spacing:-.02em}
+.m-v.t{color:var(--teal)}.m-v.g{color:var(--green)}.m-v.y{color:var(--yellow)}.m-v.r{color:var(--red)}.m-v.b{color:var(--blue)}
+.m-l{font-size:12.5px;color:var(--text3);margin-top:5px;line-height:1.3;font-weight:500}
+.m-c{font-size:11.5px;margin-top:4px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+.meal{padding:14px 0;border-bottom:1px solid var(--border)}
+.meal:last-child{border-bottom:none;padding-bottom:0}
+.meal-t{font-size:12px;font-weight:800;color:var(--teal);margin-bottom:4px;letter-spacing:.04em;text-transform:uppercase}
+.meal-h{font-size:15px;font-weight:700;color:var(--text);margin-bottom:5px}
+.meal-d{font-size:14.5px;color:var(--text2);line-height:1.7}
+.meal-d strong{color:var(--text);font-weight:700}
+.cal-tag{display:inline-block;background:var(--green-l);color:var(--green-t);font-size:12px;font-weight:800;padding:3px 9px;border-radius:10px;margin-left:8px}
+.box{border-radius:var(--r-sm);padding:14px 18px;margin-bottom:12px;font-size:14.5px;line-height:1.65;font-weight:500}
+.box-r{background:var(--red-l);color:var(--red-t);border-left:4px solid var(--red)}
+.box-g{background:var(--green-l);color:var(--green-t);border-left:4px solid var(--green)}
+.box-y{background:var(--yellow-l);color:var(--yellow-t);border-left:4px solid var(--yellow)}
+.box-b{background:var(--blue-l);color:var(--blue-t);border-left:4px solid var(--blue)}
+.box-t{background:var(--teal-l);color:var(--teal-t);border-left:4px solid var(--teal)}
+.box strong{font-weight:800}
+.badge{display:inline-flex;align-items:center;font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:14px;text-transform:uppercase;letter-spacing:.04em}
+.b-run{background:var(--green-l);color:var(--green-t)}
+.b-fuerza{background:var(--orange-l);color:var(--orange-t)}
+.b-rest{background:#f1f5f9;color:var(--text2)}
+.b-fartlek{background:var(--yellow-l);color:var(--yellow-t)}
+.b-cardio{background:var(--blue-l);color:var(--blue-t)}
+.b-trek{background:var(--teal-l);color:var(--teal-t)}
+.day{background:var(--card);border-radius:var(--r);margin-bottom:12px;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden}
+.day-h{padding:16px 22px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;transition:background .15s}
+.day-h:hover{background:#f8fafc}
+.day-l{display:flex;flex-direction:column;gap:6px;flex:1}
+.day-n{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.01em}
+.chev{font-size:16px;color:var(--text3);transition:transform .2s;font-weight:700}
+.day.open .chev{transform:rotate(180deg)}
+.day-b{display:none;padding:6px 22px 18px;border-top:1px solid var(--border)}
+.day.open .day-b{display:block}
+.ex-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
+@media(min-width:700px){.ex-grid{grid-template-columns:repeat(3,1fr)}}
+.ex-card{border-radius:var(--r-sm);padding:14px 12px;text-align:center;border:1px solid}
+.ex-card.o{background:var(--orange-l);border-color:#fed7aa}
+.ex-card.b{background:var(--blue-l);border-color:#bfdbfe}
+.ex-card.g{background:var(--green-l);border-color:#bbf7d0}
+.ex-card.p{background:var(--purple-l);border-color:#ddd6fe}
+.ex-card.t{background:var(--teal-l);border-color:#99f6e4}
+.ex-icon{font-size:22px;margin-bottom:5px;font-weight:800;color:var(--teal-t)}
+.ex-name{font-size:13px;font-weight:800;margin-bottom:3px;line-height:1.3}
+.ex-card.o .ex-name{color:var(--orange-t)}
+.ex-card.b .ex-name{color:var(--blue-t)}
+.ex-card.g .ex-name{color:var(--green-t)}
+.ex-card.p .ex-name{color:var(--purple-t)}
+.ex-card.t .ex-name{color:var(--teal-t)}
+.ex-detail{font-size:11.5px;line-height:1.5;font-weight:600}
+.ex-card.o .ex-detail{color:#9a3412}
+.ex-card.b .ex-detail{color:#1e40af}
+.ex-card.g .ex-detail{color:#166534}
+.ex-card.p .ex-detail{color:#5b21b6}
+.ex-card.t .ex-detail{color:#115e59}
+.ex-del{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;border:none;font-size:14px;font-weight:800;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:5}
+.ex-edited-flag{position:absolute;top:6px;left:6px;background:var(--yellow);color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px;display:none;z-index:5}
+body.edit-mode .ex-card{cursor:pointer;position:relative;transition:all .2s}
+body.edit-mode .ex-card:hover{border-style:dashed;transform:translateY(-3px);box-shadow:0 6px 14px rgba(15,23,42,.12)}
+body.edit-mode .ex-del{display:flex}
+body.edit-mode .ex-edited-flag{display:block}
+.ex-input{width:100%;border:none;background:transparent;text-align:center;font-family:inherit;font-weight:inherit;color:inherit;outline:none;padding:0}
+.ex-input.name{font-size:13px;font-weight:800;line-height:1.3;margin-bottom:3px}
+.ex-input.detail{font-size:11.5px;line-height:1.5;font-weight:600}
+.ex-input.icon{font-size:22px;font-weight:800;margin-bottom:5px;max-width:50px;margin-left:auto;margin-right:auto;text-transform:uppercase}
+.ex-input:focus{background:rgba(255,255,255,.7);border-radius:4px;box-shadow:inset 0 0 0 2px var(--teal)}
+.ex-add-bar{margin:8px 0 16px;text-align:center;display:none}
+body.edit-mode .ex-add-bar{display:block}
+.btn-add-ex{padding:8px 14px;background:var(--green);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer}
+.chg{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.chg:last-child{border-bottom:none}
+.chg-i{font-size:17px;flex-shrink:0;margin-top:2px;font-weight:800;color:var(--teal);min-width:32px;height:32px;background:var(--teal-l);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.chg-b{font-size:14.5px;color:var(--text2);line-height:1.7}
+.chg-b strong{color:var(--text);font-weight:800;display:block;margin-bottom:3px}
+.ft{width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:8px}
+.ft th{text-align:left;color:var(--text3);font-weight:800;padding:10px 12px;border-bottom:2px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+.ft td{padding:12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.55}
+.ft tr:last-child td{border-bottom:none}
+.ft td:first-child{font-weight:800;color:var(--teal);min-width:90px;font-size:12px}
+.ft tr.hl{background:var(--yellow-l)}
+.ft tr.hl td:first-child{color:var(--yellow-t)}
+.chips{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+@media(min-width:700px){.chips{grid-template-columns:repeat(4,1fr)}}
+.chip{padding:11px 13px;border-radius:var(--r-sm);font-size:13px;line-height:1.4;font-weight:600;text-align:center}
+.tip{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.tip:last-child{border-bottom:none}
+.tip-n{font-size:16px;font-weight:800;color:#fff;min-width:32px;height:32px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tip-t{font-size:14.5px;color:var(--text2);line-height:1.7;padding-top:3px}
+.tip-t strong{color:var(--text);font-weight:700}
+.prog-bar{background:#e2e8f0;border-radius:10px;height:14px;overflow:hidden;margin:6px 0 4px}
+.prog-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--teal),#14b8a6);transition:width .5s ease}
+.prog-l{display:flex;justify-content:space-between;font-size:13px;color:var(--text3);margin-bottom:12px;font-weight:600}
+.hero{background:linear-gradient(135deg,#ccfbf1,#99f6e4);border:2px solid #5eead4;border-radius:var(--r);padding:22px 26px;margin-bottom:18px}
+.hero h2{font-size:20px;font-weight:800;color:var(--teal-t);margin-bottom:8px;letter-spacing:-.01em}
+.hero p{font-size:14.5px;color:#0f766e;line-height:1.7}
+.f-h{background:linear-gradient(135deg,#ffedd5,#fed7aa);border:2px solid #fb923c;border-radius:var(--r);padding:22px 26px;margin-bottom:18px}
+.f-h h2{font-size:20px;font-weight:800;color:var(--orange-t);margin-bottom:8px;letter-spacing:-.01em}
+.f-h p{font-size:14.5px;color:#7c2d12;line-height:1.7}
+.m-h{background:linear-gradient(135deg,#dbeafe,#bfdbfe);border:2px solid #60a5fa;border-radius:var(--r);padding:22px 26px;margin-bottom:18px}
+.m-h h2{font-size:20px;font-weight:800;color:var(--blue-t);margin-bottom:8px;letter-spacing:-.01em}
+.m-h p{font-size:14.5px;color:#1e3a8a;line-height:1.7}
+.d-h{background:linear-gradient(135deg,#fee2e2,#fecaca);border:2px solid #f87171;border-radius:var(--r);padding:22px 26px;margin-bottom:18px}
+.d-h h2{font-size:20px;font-weight:800;color:var(--red-t);margin-bottom:8px;letter-spacing:-.01em}
+.d-h p{font-size:14.5px;color:#7f1d1d;line-height:1.7}
+.sec-l{font-size:14px;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.08em;margin:22px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--teal)}
+ul.plain{list-style:none;padding:0}
+ul.plain li{font-size:14.5px;color:var(--text2);line-height:1.8;padding-left:22px;position:relative;margin-bottom:4px}
+ul.plain li::before{content:'>';position:absolute;left:0;color:var(--teal);font-size:14px;font-weight:800}
+ul.plain li strong{color:var(--text);font-weight:700}
+.lab{width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:14px}
+.lab th,.lab td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.lab th{background:var(--bg);color:var(--text3);font-weight:800;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em}
+.lab td:first-child{font-weight:700;color:var(--text)}
+.lab .ok{color:var(--green-t);font-weight:800}
+.lab .warn{color:var(--yellow-t);font-weight:800}
+.lab .bad{color:var(--red-t);font-weight:800}
+.lab .good-bg{background:var(--green-l)}
+.lab .warn-bg{background:var(--yellow-l)}
+.tracker{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:18px}
+@media(min-width:700px){.tracker{grid-template-columns:repeat(3,1fr)}}
+.tk{background:var(--card);border-radius:var(--r-sm);padding:14px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.tk-l{font-size:12px;color:var(--text3);text-transform:uppercase;font-weight:800;letter-spacing:.04em;margin-bottom:6px}
+.tk input,.tk textarea{width:100%;border:2px solid var(--border);border-radius:8px;padding:10px 11px;font-size:16px;font-weight:700;color:var(--teal-t);outline:none;font-family:inherit}
+.tk input:focus,.tk textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,118,110,.15)}
+.tk textarea{min-height:80px;resize:vertical;font-size:14px}
+.callout{display:flex;gap:14px;padding:18px 20px;background:var(--yellow-l);border-left:5px solid var(--yellow);border-radius:10px;margin-bottom:14px;align-items:flex-start}
+.callout-i{font-size:24px;flex-shrink:0;font-weight:800;color:var(--yellow-t);width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.callout-t{font-size:14.5px;color:var(--yellow-t);line-height:1.65}
+.callout-t strong{display:block;margin-bottom:4px;font-size:15px}
+.water-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:14px}
+.water-c{aspect-ratio:1;background:#e2e8f0;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;font-weight:800;color:var(--text3);transition:transform .15s}
+.water-c:hover{transform:scale(1.05)}
+.water-c.done{background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff}
+table.supp{width:100%;font-size:13.5px;border-collapse:collapse}
+table.supp th{text-align:left;color:var(--text3);font-weight:800;font-size:11.5px;text-transform:uppercase;padding:8px 12px;border-bottom:2px solid var(--border);letter-spacing:.05em}
+table.supp td{padding:12px;border-bottom:1px solid var(--border);color:var(--text2);font-size:14px;line-height:1.55}
+table.supp td:first-child{font-weight:700;color:var(--text);min-width:130px}
+table.supp td:nth-child(2){color:var(--teal);font-weight:800;text-align:center}
+.edit-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 18px;background:var(--card);border:2px solid var(--border);border-radius:var(--r);margin-bottom:16px;box-shadow:var(--shadow)}
+.edit-toolbar-info{flex:1;font-size:14px;color:var(--text2);min-width:200px;line-height:1.45}
+.edit-toolbar-info strong{color:var(--teal);font-weight:800}
+.btn-edit-toggle{padding:10px 18px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-weight:800;font-size:14px;cursor:pointer}
+.btn-edit-toggle.active{background:var(--orange)}
+.btn-reset{padding:10px 16px;background:#fff;color:var(--red);border:2px solid var(--red);border-radius:10px;font-weight:700;font-size:14px;cursor:pointer}
+.save-status{padding:10px 14px;border-radius:10px;font-size:13.5px;font-weight:700;text-align:center;margin-bottom:14px;display:none}
+.save-status.saved{background:var(--green-l);color:var(--green-t);display:block}
+.expand-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.expand-bar button{padding:10px 16px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer}
+.expand-bar button.collapse{background:#fff;color:var(--teal);border:2px solid var(--teal)}
+
+</style>
+</head>
+<body>
+<div class="app">
+<div class="hdr">
+<div class="hdr-top">
+<div class="logo">J</div>
+<div>
+<div class="logo-t">Plan Integral - José</div>
+<div class="logo-s">47 años - 83 kg - 1,73 m - Machachi - 3.000 m s. n. m.</div>
+</div>
+</div>
+<div class="pills">
+<span class="pill pill-y">Déficit -500 kcal/día</span>
+<span class="pill pill-g">Meta -6 kg en 12 sem</span>
+<span class="pill pill-r">HbA1c &lt; 5,7%</span>
+</div>
+<div class="nav" id="nav">
+<button class="nav-btn active" data-page="progre">1. Progreso Semanal</button>
+<button class="nav-btn" data-page="entreno">2. Entrenamiento</button>
+<button class="nav-btn" data-page="menu">3. Menú Semanal</button>
+<button class="nav-btn" data-page="nutri">4. Guía Nutricional</button>
+<button class="nav-btn" data-page="compras">5. Lista Compras</button>
+<button class="nav-btn" data-page="suple">6. Suplementos</button>
+<button class="nav-btn" data-page="alarma">7. Alarmas</button>
+</div>
+</div>
+<div class="content">
+<div class="page active" id="page-progre">
+<div class="hero"><h2>1. Progreso Semanal</h2><p>Esta es la primera pantalla al abrir la app. Llena estos datos CADA LUNES en ayunas. Se guardan automáticamente en este dispositivo. Lo más importante es la <strong>tendencia</strong>, no los valores aislados.</p></div>
+
+<div class="card"><div class="card-t">Datos biométricos de la semana</div>
+<div class="tracker">
+<div class="tk"><div class="tk-l">Peso (kg)</div><input type="number" step="0.1" id="w-peso" placeholder="0.0"></div>
+<div class="tk"><div class="tk-l">Cintura (cm)</div><input type="number" step="0.5" id="w-cintura" placeholder="0"></div>
+<div class="tk"><div class="tk-l">Cadera (cm)</div><input type="number" step="0.5" id="w-cadera" placeholder="0"></div>
+<div class="tk"><div class="tk-l">Glucosa ayunas</div><input type="number" id="w-glucosa" placeholder="mg/dL"></div>
+<div class="tk"><div class="tk-l">PA sistólica</div><input type="number" id="w-paSis" placeholder="mmHg"></div>
+<div class="tk"><div class="tk-l">PA diastólica</div><input type="number" id="w-paDia" placeholder="mmHg"></div>
+<div class="tk"><div class="tk-l">FC reposo</div><input type="number" id="w-fc" placeholder="lpm"></div>
+<div class="tk"><div class="tk-l">Pasos promedio</div><input type="number" id="w-pasos" placeholder="0/día"></div>
+<div class="tk"><div class="tk-l">Horas sueño</div><input type="number" step="0.5" id="w-sueno" placeholder="h"></div>
+<div class="tk"><div class="tk-l">Litros agua/día</div><input type="number" step="0.1" id="w-agua" placeholder="0.0"></div>
+<div class="tk"><div class="tk-l">Cumplimiento dieta (1-10)</div><input type="number" min="1" max="10" id="w-dieta" placeholder="1-10"></div>
+<div class="tk"><div class="tk-l">Cumplimiento entreno (1-10)</div><input type="number" min="1" max="10" id="w-entreno" placeholder="1-10"></div>
+</div>
+<div style="margin-top:14px">
+<div class="tk-l" style="font-size:13px;color:var(--text3);text-transform:uppercase;font-weight:800;letter-spacing:.06em;margin-bottom:8px">Notas / Observaciones</div>
+<textarea id="w-notas" placeholder="¿Cómo te sentiste esta semana? Alguna molestia, logro, cambio físico notable..." style="width:100%;min-height:90px;padding:11px;border:2px solid var(--border);border-radius:10px;font-family:inherit;font-size:14px;color:var(--text);resize:vertical;outline:none"></textarea>
+</div>
+<button style="width:100%;padding:13px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-weight:800;font-size:15px;margin-top:14px;cursor:pointer" onclick="saveWeek()">Guardar semana</button>
+<button style="width:100%;padding:10px;background:#fff;color:var(--teal);border:2px solid var(--teal);border-radius:10px;font-weight:700;font-size:14px;margin-top:8px;cursor:pointer" onclick="document.querySelectorAll('.tk input,textarea').forEach(i=>i.value='')">Limpiar formulario actual</button>
+</div>
+
+<div class="card"><div class="card-t">Hábitos Diarios IESS - Marca cada día de la semana actual</div>
+<div class="water-grid">
+<div class="water-c" id="hab-0" onclick="toggleHab(0)">Lun</div>
+<div class="water-c" id="hab-1" onclick="toggleHab(1)">Mar</div>
+<div class="water-c" id="hab-2" onclick="toggleHab(2)">Mié</div>
+<div class="water-c" id="hab-3" onclick="toggleHab(3)">Jue</div>
+<div class="water-c" id="hab-4" onclick="toggleHab(4)">Vie</div>
+<div class="water-c" id="hab-5" onclick="toggleHab(5)">Sáb</div>
+<div class="water-c" id="hab-6" onclick="toggleHab(6)">Dom</div>
+</div>
+<div class="box box-y" style="margin-top:10px"><strong>Los 10 hábitos IESS cada día:</strong> 1 hora ejercicio, 2-3 L agua, 3-4 porciones fruta + 5-6 verdura, 5 comidas balanceadas, no TV al comer, 7-8 h sueño, evitar fritos, masticar bien, evitar cafeína después 14h, 10 min respiración/meditación.</div>
+<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+<button style="flex:1;min-width:140px;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer" onclick="saveHabs()">Guardar hábitos</button>
+<button style="flex:1;min-width:140px;padding:10px;background:#fff;color:var(--red);border:2px solid var(--red);border-radius:8px;font-weight:700;font-size:13px;cursor:pointer" onclick="clearHabs()">Limpiar hábitos</button>
+</div>
+</div>
+
+<div class="card"><div class="card-t">Historial de Semanas Registradas</div>
+<div id="historial"></div>
+<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+<button style="flex:1;min-width:140px;padding:10px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer" onclick="exportData()">Exportar JSON</button>
+<button style="flex:1;min-width:140px;padding:10px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer" onclick="exportCSV()">Exportar CSV (Excel)</button>
+<button style="flex:1;min-width:140px;padding:10px;background:#fff;color:var(--red);border:2px solid var(--red);border-radius:8px;font-weight:700;font-size:13px;cursor:pointer" onclick="if(confirm('Borrar TODO el historial? No se puede deshacer.')){localStorage.removeItem(SK);localStorage.removeItem('plan_jose_habitos_v1');renderHist();clearHabs()}">Borrar todo</button>
+</div>
+<div class="box box-y" style="margin-top:10px"><strong>Almacenamiento:</strong> los datos viven en este navegador/dispositivo (localStorage). Si abres la app en otro celular no los verás. Usa los botones de Exportar para guardar copia.</div>
+</div>
+
+<div class="card"><div class="card-t">Calendario de Controles Médicos</div>
+<table class="lab"><thead><tr><th>Semana</th><th>Acción</th></tr></thead><tbody>
+<tr><td>Sem 0 (ahora)</td><td>Cita médico internista + cita urólogo</td></tr>
+<tr class="warn-bg"><td>Sem 1</td><td>Confirmar PSA libre, HbA1c, urocultivo</td></tr>
+<tr><td>Sem 4</td><td>Peso + cintura + presión (control métricas)</td></tr>
+<tr><td>Sem 8</td><td>Control metabólico intermedio (perfil lipídico)</td></tr>
+<tr class="good-bg"><td><strong>Sem 12</strong></td><td><strong>Laboratorio completo post-plan: HbA1c, Glucosa, CT, LDL, HDL, TG, creatinina, PSA</strong></td></tr>
+</tbody></table>
+</div>
+</div>
+
+<div class="page" id="page-entreno">
+<div class="f-h"><h2>2. Tu Plan Deportivo Real - Altitud 3.000 m</h2><p><strong>FCmax medida con Garmin:</strong> 180 lpm (más de 1 año de mediciones). Esta cifra es la fuente real para calcular tus zonas. La rutina ya está calibrada con tu FCMax y tu disponibilidad horaria.</p></div>
+
+<div class="edit-toolbar">
+<div class="edit-toolbar-info">
+<strong>Modo edición</strong> - Activa el botón, luego toca cualquier ejercicio para modificarlo. Tus cambios se guardan automáticamente.
+</div>
+<button class="btn-edit-toggle" id="btnEditMode" onclick="toggleEditMode()">Activar edición</button>
+<button class="btn-reset" onclick="resetExercises()">Restaurar plan original</button>
+</div>
+<div class="save-status" id="saveStatus"></div>
+
+<div class="card"><div class="card-t">Tus Zonas FC (basadas en Garmin - FCMax 180)</div>
+<table class="lab"><thead><tr><th>Zona</th><th>% FCMax</th><th>lpm (tu Garmin)</th><th>Uso</th></tr></thead><tbody>
+<tr><td>Z1 Recuperación</td><td>50-60%</td><td>90-108</td><td>Calentamiento, vuelta a la calma</td></tr>
+<tr class="warn-bg"><td><strong>Z2 Quema grasa</strong></td><td><strong>60-70%</strong></td><td><strong>108-126</strong></td><td><strong>Tu zona principal diaria</strong></td></tr>
+<tr><td>Z3 Tempo</td><td>70-80%</td><td>126-144</td><td>Sesión larga dominical (1.5h)</td></tr>
+<tr><td>Z4 Umbral</td><td>80-90%</td><td>144-162</td><td>Solo picos en farklet (Mié)</td></tr>
+<tr class="bad-bg"><td>Z5 VO2max</td><td>90-100%</td><td>162-180</td><td>EVITAR salvo picos muy cortos</td></tr>
+</tbody></table>
+<div class="box box-b" style="margin-top:8px"><strong>Recomendación:</strong> tu rutina está centrada en Z2 (108-126 lpm). Solo el domingo subes a Z3, y el miércoles el farklet incluye picos a Z4. Perfecto para quemar grasa y mejorar metabolismo.</div>
+</div>
+
+<div class="card"><div class="card-t">Tu Semana Tipo (basada en tu rutina real)</div>
+<table class="lab"><thead><tr><th>Día</th><th>Mañana 05:00 (cardio)</th><th>Tarde 18:00 (fuerza)</th></tr></thead><tbody>
+<tr><td><strong>Lunes</strong></td><td>Carrera 45 min Z2 (108-126 lpm)</td><td>Fuerza inferior + core (45 min)</td></tr>
+<tr><td><strong>Martes</strong></td><td>Bicicleta 1h Z2 (108-126 lpm)</td><td>-</td></tr>
+<tr><td><strong>Miércoles</strong></td><td>Farklet carrera ~50 min (Z2 + picos Z4)</td><td>Fuerza superior + core (45 min)</td></tr>
+<tr><td><strong>Jueves</strong></td><td>Bicicleta 1h Z2 (108-126 lpm)</td><td>-</td></tr>
+<tr><td><strong>Viernes</strong></td><td>Carrera 45 min Z2 (108-126 lpm)</td><td>Fuerza cuerpo completo (45 min)</td></tr>
+<tr><td><strong>Sábado</strong></td><td>Sesión mixta &gt;2h Z2 (108-126 lpm)</td><td>-</td></tr>
+<tr><td><strong>Domingo</strong></td><td>Sesión Z3 1.5h (126-144 lpm)</td><td>-</td></tr>
+</tbody></table>
+</div>
+
+<div class="sec-l">Lunes 18:00 - Fuerza Inferior + Suelo Pélvico (post-carrera)</div>
+<div class="day open" onclick="this.classList.toggle('open')"><div class="day-h"><div class="day-l"><div class="day-n">Lunes 18:00 - Tren Inferior + Suelo Pélvico (45 min)</div><div><span class="badge b-fuerza">Fuerza</span><span class="badge b-trek" style="margin-left:5px">Post-Carrera</span></div></div><span class="chev">v</span></div>
+<div class="day-b">
+<div class="box box-b" style="margin-bottom:10px"><strong>Contexto:</strong> corriste 45 min Z2 a las 5:00 AM. Llegarás con piernas trabajadas, sesión moderada. Enfoque en sentadilla, cadena posterior y CORE PROFUNDO (clave para mejorar tu retención vesical de 259 ml).</div>
+<div class="ex-grid" data-grid="lun-inf">
+<div class="ex-card o"><div class="ex-icon">SG</div><div class="ex-name">Sentadilla goblet</div><div class="ex-detail">3 x 12 - 75s desc.</div></div>
+<div class="ex-card o"><div class="ex-icon">PD</div><div class="ex-name">Peso muerto rumano</div><div class="ex-detail">3 x 12 - 75s desc.</div></div>
+<div class="ex-card o"><div class="ex-icon">SB</div><div class="ex-name">Sentadilla búlgara</div><div class="ex-detail">3 x 10 c/pierna</div></div>
+<div class="ex-card o"><div class="ex-icon">EC</div><div class="ex-name">Extensión cuádriceps</div><div class="ex-detail">3 x 12 - 60s desc.</div></div>
+<div class="ex-card o"><div class="ex-icon">CF</div><div class="ex-name">Curl femoral</div><div class="ex-detail">3 x 12 - 60s desc.</div></div>
+<div class="ex-card o"><div class="ex-icon">GE</div><div class="ex-name">Gemelos</div><div class="ex-detail">3 x 15 - 45s desc.</div></div>
+<div class="ex-card p"><div class="ex-icon">PG</div><div class="ex-name">Puente de glúteos (suelo pélvico)</div><div class="ex-detail">3 x 15 - 45s desc.</div></div>
+<div class="ex-card p"><div class="ex-icon">BD</div><div class="ex-name">Bird-dog (core + lumbares)</div><div class="ex-detail">3 x 10 c/lado</div></div>
+<div class="ex-card p"><div class="ex-icon">PL</div><div class="ex-name">Plancha frontal</div><div class="ex-detail">3 x 30-45s</div></div>
+</div>
+<div class="ex-add-bar"><button class="btn-add-ex" onclick="addExercise(this)">+ Añadir ejercicio</button></div>
+<div class="box box-y"><strong>Importante HPB:</strong> NO sentadilla profunda con peso máximo ni Valsalva. Exhala en el esfuerzo. Empeora la retención vesical.</div>
+<div class="box box-g">Estiramiento 10 min al final.</div>
+</div></div>
+
+<div class="sec-l">Miércoles 18:00 - Fuerza Superior + Core (post-farklet)</div>
+<div class="day" onclick="this.classList.toggle('open')"><div class="day-h"><div class="day-l"><div class="day-n">Miércoles 18:00 - Tren Superior + Core (45 min)</div><div><span class="badge b-fuerza">Fuerza</span><span class="badge b-trek" style="margin-left:5px">Post-Farklet</span></div></div><span class="chev">v</span></div>
+<div class="day-b">
+<div class="box box-b" style="margin-bottom:10px"><strong>Contexto:</strong> hiciste farklet en la mañana. Sesión más ligera.</div>
+<div class="ex-grid" data-grid="mie-sup">
+<div class="ex-card b"><div class="ex-icon">PB</div><div class="ex-name">Press banca plano</div><div class="ex-detail">3 x 10 - 75s desc.</div></div>
+<div class="ex-card b"><div class="ex-icon">RM</div><div class="ex-name">Remo mancuerna 1 brazo</div><div class="ex-detail">3 x 10 c/lado</div></div>
+<div class="ex-card b"><div class="ex-icon">PM</div><div class="ex-name">Press militar sentado</div><div class="ex-detail">3 x 12 - 60s desc.</div></div>
+<div class="ex-card b"><div class="ex-icon">AM</div><div class="ex-name">Aperturas inclinado</div><div class="ex-detail">3 x 12 - 60s desc.</div></div>
+<div class="ex-card b"><div class="ex-icon">RP</div><div class="ex-name">Remo polea baja</div><div class="ex-detail">3 x 12 - 60s desc.</div></div>
+<div class="ex-card b"><div class="ex-icon">CB</div><div class="ex-name">Curl bíceps</div><div class="ex-detail">3 x 12 - 45s desc.</div></div>
+<div class="ex-card p"><div class="ex-icon">ET</div><div class="ex-name">Extensión tríceps polea</div><div class="ex-detail">3 x 12 - 45s desc.</div></div>
+<div class="ex-card p"><div class="ex-icon">FP</div><div class="ex-name">Face pulls (salud hombro)</div><div class="ex-detail">3 x 15 - 45s desc.</div></div>
+<div class="ex-card p"><div class="ex-icon">PL</div><div class="ex-name">Plancha lateral</div><div class="ex-detail">3 x 30s c/lado</div></div>
+<div class="ex-card p"><div class="ex-icon">DB</div><div class="ex-name">Dead bug (core sin impacto)</div><div class="ex-detail">3 x 10 c/lado</div></div>
+</div>
+<div class="ex-add-bar"><button class="btn-add-ex" onclick="addExercise(this)">+ Añadir ejercicio</button></div>
+<div class="box box-g">Estiramiento 10 min al final.</div>
+</div></div>
+
+<div class="sec-l">Viernes 18:00 - Cuerpo Completo (sesión fuerte de la semana)</div>
+<div class="day" onclick="this.classList.toggle('open')"><div class="day-h"><div class="day-l"><div class="day-n">Viernes 18:00 - Cuerpo Completo (45 min)</div><div><span class="badge b-fuerza">Fuerza</span><span class="badge b-trek" style="margin-left:5px">Sesión fuerte</span></div></div><span class="chev">v</span></div>
+<div class="day-b">
+<div class="box box-b" style="margin-bottom:10px"><strong>Contexto:</strong> tu sesión de fuerza más exigente. 4 series x 6-10 reps.</div>
+<div class="ex-grid" data-grid="vie-total">
+<div class="ex-card g"><div class="ex-icon">SQ</div><div class="ex-name">Sentadilla frontal</div><div class="ex-detail">4 x 8-10 - 90s desc.</div></div>
+<div class="ex-card g"><div class="ex-icon">PD</div><div class="ex-name">Peso muerto rumano</div><div class="ex-detail">4 x 8-10 - 90s desc.</div></div>
+<div class="ex-card g"><div class="ex-icon">PB</div><div class="ex-name">Press banca inclinado</div><div class="ex-detail">4 x 10 - 75s desc.</div></div>
+<div class="ex-card g"><div class="ex-icon">JP</div><div class="ex-name">Dominadas o jalón al pecho</div><div class="ex-detail">4 x 8-10 - 75s desc.</div></div>
+<div class="ex-card g"><div class="ex-icon">PM</div><div class="ex-name">Press militar de pie</div><div class="ex-detail">3 x 10 - 75s desc.</div></div>
+<div class="ex-card g"><div class="ex-icon">RP</div><div class="ex-name">Remo polea</div><div class="ex-detail">3 x 10 - 60s desc.</div></div>
+<div class="ex-card p"><div class="ex-icon">PP</div><div class="ex-name">Pallof press (anti-rotación)</div><div class="ex-detail">3 x 10 c/lado</div></div>
+<div class="ex-card p"><div class="ex-icon">FW</div><div class="ex-name">Farmer's walk (agarre + core)</div><div class="ex-detail">3 x 30 metros</div></div>
+</div>
+<div class="ex-add-bar"><button class="btn-add-ex" onclick="addExercise(this)">+ Añadir ejercicio</button></div>
+<div class="box box-g">Estiramiento 10 min al final.</div>
+</div></div>
+
+<div class="card"><div class="card-t">Protocolo Pre/Post Entreno</div>
+<div class="chg"><div class="chg-i">AM</div><div class="chg-b"><strong>Pre cardio 4:30 AM:</strong> 1 plátano pequeño + 1 cdta mantequilla de maní (NO cardio en ayunas total).</div></div>
+<div class="chg"><div class="chg-i">PM</div><div class="chg-b"><strong>Pre fuerza 17:00:</strong> yogurt griego 200g + 1 cdta miel + 1 cda granola.</div></div>
+<div class="chg"><div class="chg-i">POST</div><div class="chg-b"><strong>Post cardio (6:30 AM):</strong> desayuno fuerte con proteína + carb complejo.</div></div>
+<div class="chg"><div class="chg-i">CENA</div><div class="chg-b"><strong>Post fuerza (19:30):</strong> cena alta en proteína + carb moderado + verduras.</div></div>
+</div>
+
+<div class="card"><div class="card-t">Precauciones por Altitud + Diabetes</div>
+<div class="box box-r"><strong>PARA inmediatamente si sientes:</strong> cefalea persistente, mareo, náuseas, disnea excesiva, dolor torácico, palpitaciones.</div>
+<ul class="plain" style="margin-top:8px">
+<li>Mide glucosa antes de las 5:00 AM los primeros 15 días. Si &lt; 80 mg/dL: toma ½ plátano antes de salir. Si &gt; 250: NO entrenes.</li>
+<li>Lleva azúcar rápida (dextrosa o caramelos) por si hipoglucemia durante el cardio.</li>
+<li>NO entrenar entre 11 AM y 15 PM (radiación UV extrema en Machachi).</li>
+<li>Hidratación crítica: mínimo 3 L/día (4 L días de entreno largo).</li>
+<li>Usa tu Garmin para confirmar zonas - ya está calibrado con tu FCMax real.</li>
+<li>NO hacer Valsalva (aguantar aire) en ejercicios pesados - empeora retención prostática.</li>
+<li>Ve al baño antes de la fuerza - no entrenar con vejiga llena.</li>
+</ul>
+</div>
+</div>
+
+<div class="page" id="page-menu">
+<div class="hero"><h2>3. Menú Semanal Adaptado</h2><p>Menú personalizado con tus horarios de entreno: pre-entrenos 4:30 AM, desayunos post-cardio 6:30, snacks pre-fuerza 17:00 y cenas post-fuerza 19:30. Promedio 1.700-1.950 kcal/día. Clic en cada día para expandir.</p></div>
+
+<div class="expand-bar">
+<button onclick="document.querySelectorAll('#page-menu .day').forEach(d=>d.classList.add('open'))">Expandir todos los días</button>
+<button class="collapse" onclick="document.querySelectorAll('#page-menu .day').forEach(d=>d.classList.remove('open'))">Colapsar todos</button>
+</div>
+
+<div class="day open" onclick="this.classList.toggle('open')"><div class="day-h"><div class="day-l"><div class="day-n">Lunes</div><div><span class="badge b-run">Carrera 45' Z2</span><span class="badge b-fuerza" style="margin-left:5px">Fuerza Inf.</span></div></div><span class="chev">v</span></div>
+<div class="day-b">
+<div class="meal"><div class="meal-t">4:30 AM - Pre cardio</div><div class="meal-h">Carga ligera para glucemia estable <span class="cal-tag">~120 kcal</span></div><div class="meal-d"><strong>Opción A:</strong> 1 plátano pequeño maduro + 1 cdta mantequilla de maní. <strong>Opción B:</strong> 2-3 dátiles + 5 almendras. Tomar con 250 ml agua tibia con pizca sal.</div></div>
+<div class="meal"><div class="meal-t">5:00 - 5:45 AM</div><div class="meal-h">Carrera 45 min Z2 (FC 108-126) <span class="cal-tag">~300 kcal quemadas</span></div><div class="meal-d">Solo agua con pizca sal. Si FC sube por encima de 130 sostenido, baja ritmo.</div></div>
+<div class="meal"><div class="meal-t">6:30 AM - Desayuno POST cardio</div><div class="meal-h">Bowl de quinua andino completo <span class="cal-tag">520 kcal</span></div><div class="meal-d">1 taza quinua cocida + 1 cdta mantequilla de maní + ½ taza mora o mortiño + canela + 1 cdta chía + 3 huevos revueltos + café con stevia.</div></div>
+<div class="meal"><div class="meal-t">10:30 AM</div><div class="meal-h">Frutos secos + fruta <span class="cal-tag">180 kcal</span></div><div class="meal-d">1 manzana verde + 8 almendras crudas + 1 cdta linaza molida espolvoreada.</div></div>
+<div class="meal"><div class="meal-t">13:30 PM</div><div class="meal-h">Trucha andina + quinua <span class="cal-tag">600 kcal</span></div><div class="meal-d">Sopa de verduras + trucha a la plancha 150 g + ensalada (rúcula, tomate, aguacate) + ½ taza arroz integral + vinagreta de limón.</div></div>
+<div class="meal"><div class="meal-t">17:00 PM - Pre fuerza</div><div class="meal-h">Yogurt griego energético <span class="cal-tag">220 kcal</span></div><div class="meal-d">Yogurt griego natural 200 g + 1 cdta miel cruda + 1 cda granola sin azúcar + 5 fresas.</div></div>
+<div class="meal"><div class="meal-t">18:00 - 18:45 PM</div><div class="meal-h">Fuerza Inferior + Core <span class="cal-tag">~250 kcal quemadas</span></div><div class="meal-d">Sentadilla goblet, peso muerto rumano, búlgara, cuádriceps, femoral, gemelos, puente glúteos, bird-dog, plancha frontal. 300-500 ml agua con pizca sal.</div></div>
+<div class="meal"><div class="meal-t">19:30 PM - Cena POST fuerza</div><div class="meal-h">Pechuga + camote <span class="cal-tag">550 kcal</span></div><div class="meal-d">Pechuga de pollo a la plancha 180 g + ½ camote asado + ensalada grande + 1 cda aceite oliva + limón. Agua tibia.</div></div>
+<div class="meal"><div class="meal-t">21:30 PM - Snack nocturno (opcional)</div><div class="meal-h">Infusión relajante <span class="cal-tag">30 kcal</span></div><div class="meal-d">Té de manzanilla o té verde. Sin azúcar.</div></div>
+<div class="box box-t" style="margin-top:10px"><strong>Total lunes: ~2.220 kcal consumidas - ~550 kcal quemadas = ~1.670 kcal netas</strong></div>
+</div></div>
+
+<div class="day" onclick="this.classList.toggle('open')"><div class="day-h"><div class="day-l"><div class="day-n">Martes</div><div><span class="badge b-run">Bicicleta 1h Z2</span></div></div><span class="chev">v</span></div>
+<div class="day-b">
+<div class="meal"><div class="meal-t">4:30 AM - Pre bici</div><div class="meal-h">Carga energética sostenida <span class="cal-tag">~100 kcal</span></div><div class="meal-d">3 dátiles + 5 almendras + 250 ml agua tibia con pizca sal.</div></div>
+<div class="meal"><div class="meal-t">5:00 - 6:00 AM</div><div class="meal-h">Bicicleta 1h Z2 (FC 108-126) <span class="cal-tag">~400 kcal quemadas</span></div><div class="meal-d">600-800 ml agua + electrolitos durante la hora.</div></div>
+<div class="meal"><div class="meal-t">7:00 AM - Desayuno POST cardio</div><div class="meal-h">Omelette proteico completo <span class="cal-tag">480 kcal</span></div><div class="meal-d">3 claras + 1 huevo entero + champiñones + espinaca salteada + 1 tostada centeno + ½ aguacate + café con stevia.</div></div>
+<div class="meal"><div class="meal-t">10:30 AM</div><div class="meal-h">Pera + nueces <span class="cal-tag">180 kcal</span></div><div class="meal-d">1 pera + 10 nueces + 1 cdta chía.</div></div>
+<div class="meal"><div class="meal-t">13:30 PM</div><div class="meal-h">Pollo + verduras + quinua <span class="cal-tag">620 kcal</span></div><div class="meal-d">Pollo a la plancha 180 g + ensalada grande (brócoli, coliflor, zanahoria, betabel) + ¾ taza quinua + 1 cda aceite oliva.</div></div>
+<div class="meal"><div class="meal-t">16:30 PM</div><div class="meal-h">Merienda ligera <span class="cal-tag">120 kcal</span></div><div class="meal-d">1 yogurt griego natural 150 g + canela espolvoreada.</div></div>
+<div class="meal"><div class="meal-t">19:30 PM - Cena (no hay fuerza)</div><div class="meal-h">Atún mediterráneo <span class="cal-tag">380 kcal</span></div><div class="meal-d">1 lata atún en agua + lechuga, tomate, pepino + 1 cda aceite oliva + limón + 1 tostada centeno pequeña.</div></div>
+<div class="box box-t" style="margin-top:10px"><strong>Total martes: ~1.960 kcal - ~400 quemadas = ~1.560 kcal netas</strong></div>
+</div></div>
+
+<div class="day" onclick="this.classList.toggle('open')"><div class="day-h"><div class="day-l"><div class="day-n">Miércoles</div><div><span class="badge b-fartlek">Farklet 50'</span><span class="badge b-fuerza" style="margin-left:5px">Fuerza Sup.</span></div></div><span class="chev">v</span></div>
+<div class="day-b">
+<div class="meal"><div class="meal-t">4:30 AM - Pre farklet</div><div class="meal-h">Carga con carb rápido <span class="cal-tag">~140 kcal</span></div><div class="meal-d">1 plátano pequeño maduro + 2 cdas avena cruda + 5 almendras + 250 ml agua tibia.</div></div>
+<div class="meal"><div class="meal-t">5:00 - 5:50 AM</div><div class="meal-h">Farklet 50 min (Z2 + picos Z4) <span class="cal-tag">~450 kcal quemadas</span></div><div class="meal-d">10 min calentamiento suave + 30 min (10 ciclos: 1 min Z4 + 2 min Z2) + 10 min vuelta a la calma. Agua con pizca sal.</div></div>
+<div class="meal"><div class="meal-t">6:45 AM - Desayuno POST cardio</div><div class="meal-h">Bowl de avena energético <span class="cal-tag">450 kcal</span></div><div class="meal-d">½ taza avena integral cocida con leche descremada + 1 cdta linaza molida + ½ plátano + canela + 1 scoop proteína whey + 1 cda mantequilla de maní.</div></div>
+<div class="meal"><div class="meal-t">10:30 AM</div><div class="meal-h">Snack proteico <span class="cal-tag">150 kcal</span></div><div class="meal-d">1 huevo duro + 1 tostada centeno + tomate.</div></div>
+<div class="meal"><div class="meal-t">13:30 PM</div><div class="meal-h">Cuy/chocho andino <span class="cal-tag">580 kcal</span></div><div class="meal-d">Sopa de chocho con verduras + ensalada completa + cuy o conejo al horno 150 g + limón.</div></div>
+<div class="meal"><div class="meal-t">17:00 PM - Pre fuerza</div><div class="meal-h">Snack ligero <span class="cal-tag">180 kcal</span></div><div class="meal-d">1 banana pequeña + 1 cdta mantequilla de maní + 1 cda granola sin azúcar.</div></div>
+<div class="meal"><div class="meal-t">18:00 - 18:45 PM</div><div class="meal-h">Fuerza Superior + Core <span class="cal-tag">~220 kcal quemadas</span></div><div class="meal-d">Press banca, remo, press militar, aperturas, remo polea, curl bíceps, extensión tríceps, face pulls, plancha lateral, dead bug.</div></div>
+<div class="meal"><div class="meal-t">19:30 PM - Cena POST fuerza</div><div class="meal-h">Salmón/trucha + camote <span class="cal-tag">580 kcal</span></div><div class="meal-d">Filete de salmón o trucha 180 g al horno + ½ camote asado + ensalada grande + brócoli al vapor.</div></div>
+<div class="box box-t" style="margin-top:10px"><strong>Total miércoles: ~2.230 kcal - ~670 quemadas = ~1.560 kcal netas</strong></div>
+</div></div>
+
+<div class="day" onclick="this.classList.toggle('open')"><div class="day-h"><div class="day-l"><div class="day-n">Jueves</div><div><span class="badge b-run">Bicicleta 1h Z2</span></div></div><span class="chev">v</span></div>
+<div class="day-b">
+<div class="meal"><div class="meal-t">4:30 AM - Pre bici</div><div class="meal-h">Carga energética <span class="cal-tag">~110 kcal</span></div><div class="meal-d">2-3 dátiles + 5 almendras + 250 ml agua tibia.</div></div>
+<div class="meal"><div class="meal-t">5:00 - 6:00 AM</div><div class="meal-h">Bicicleta 1h Z2 (FC 108-126) <span class="cal-tag">~400 kcal quemadas</span></div><div class="meal-d">Ruta distinta a la del martes. 600-800 ml agua + pizca sal.</div></div>
+<div class="meal"><div class="meal-t">6:45 AM - Desayuno POST cardio</div><div class="meal-h">Huevos + aguacate + centeno <span class="cal-tag">430 kcal</span></div><div class="meal-d">2 huevos revueltos con tomate cherry + 1 tostada centeno + ½ aguacate + café con canela.</div></div>
+<div class="meal"><div class="meal-t">10:30 AM</div><div class="meal-h">Frutos secos + fruta <span class="cal-tag">170 kcal</span></div><div class="meal-d">12 almendras + 1 mandarina + 1 cdta chía.</div></div>
+<div class="meal"><div class="meal-t">13:30 PM</div><div class="meal-h">Tilapia al vapor + papa nativa <span class="cal-tag">580 kcal</span></div><div class="meal-d">Tilapia al vapor 180 g + puré de papa nativa ½ taza + ensalada verde abundante + aceite oliva + limón.</div></div>
+<div class="meal"><div class="meal-t">16:30 PM</div><div class="meal-h">Yogurt con arándanos <span class="cal-tag">140 kcal</span></div><div class="meal-d">Yogurt griego natural 150 g + 1 cdta chía + arándanos/mortiño.</div></div>
+<div class="meal"><div class="meal-t">19:30 PM - Cena (no hay fuerza)</div><div class="meal-h">Sopa vegetariana con tofu <span class="cal-tag">340 kcal</span></div><div class="meal-d">Sopa de verduras + 100 g tofu firme + tamari + pimentón asado.</div></div>
+<div class="box box-t" style="margin-top:10px"><strong>Total jueves: ~1.840 kcal - ~400 quemadas = ~1.440 kcal netas</strong></div>
+</div></div>
+
+<div class="day" onclick="this.classList.toggle('open')"><div class="day-h"><div class="day-l"><div class="day-n">Viernes</div><div><span class="badge b-run">Carrera 45' Z2</span><span class="badge b-fuerza" style="margin-left:5px">Fuerza Total</span></div></div><span class="chev">v</span></div>
+<div class="day-b">
+<div class="meal"><div class="meal-t">4:30 AM - Pre cardio</div><div class="meal-h">Carga ligera <span class="cal-tag">~120 kcal</span></div><div class="meal-d">1 plátano pequeño + 1 cdta mantequilla de maní.</div></div>
+<div class="meal"><div class="meal-t">5:00 - 5:45 AM</div><div class="meal-h">Carrera 45 min Z2 (FC 108-126) <span class="cal-tag">~300 kcal quemadas</span></div><div class="meal-d">Agua con pizca sal durante.</div></div>
+<div class="meal"><div class="meal-t">6:30 AM - Desayuno POST cardio</div><div class="meal-h">Batido proteico alto <span class="cal-tag">450 kcal</span></div><div class="meal-d">Leche descremada 250 ml + 1 scoop proteína whey + 1 cdta mantequilla de maní + ½ plátano + 1 cda avena + hielo + canela.</div></div>
+<div class="meal"><div class="meal-t">10:30 AM</div><div class="meal-h">Snack energético <span class="cal-tag">180 kcal</span></div><div class="meal-d">1 huevo duro + 1 tostada centeno + 1 tomate + 1 cdta aceite oliva.</div></div>
+<div class="meal"><div class="meal-t">13:30 PM</div><div class="meal-h">Res magra + camote <span class="cal-tag">620 kcal</span></div><div class="meal-d">Res magra 150 g a la plancha + ensalada grande + ½ camote asado + pimientos asados.</div></div>
+<div class="meal"><div class="meal-t">17:00 PM - Pre fuerza (sesión fuerte)</div><div class="meal-h">Snack más sólido <span class="cal-tag">250 kcal</span></div><div class="meal-d">1 tostada centeno + 1 cdta mantequilla de maní + ½ plátano + 5 almendras.</div></div>
+<div class="meal"><div class="meal-t">18:00 - 18:45 PM</div><div class="meal-h">Fuerza Cuerpo Completo (sesión fuerte) <span class="cal-tag">~280 kcal quemadas</span></div><div class="meal-d">Sentadilla frontal, peso muerto, press banca, dominadas, press militar, remo polea, pallof press, farmer's walk.</div></div>
+<div class="meal"><div class="meal-t">19:30 PM - Cena POST fuerza (recuperación)</div><div class="meal-h">Pasta integral con pollo <span class="cal-tag">620 kcal</span></div><div class="meal-d">1 taza pasta integral cocida + 180 g pollo desmenuzado + salsa de tomate casera + verduras salteadas + 1 cda aceite oliva.</div></div>
+<div class="meal"><div class="meal-t">21:30 PM - Snack nocturno</div><div class="meal-h">Recuperación muscular <span class="cal-tag">120 kcal</span></div><div class="meal-d">1 yogurt griego natural con 1 cdta miel cruda + pizca de canela.</div></div>
+<div class="box box-t" style="margin-top:10px"><strong>Total viernes: ~2.360 kcal - ~580 quemadas = ~1.780 kcal netas</strong></div>
+</div></div>
+
+<div class="day" onclick="this.classList.toggle('open')"><div class="day-h"><div class="day-l"><div class="day-n">Sábado</div><div><span class="badge b-trek">Sesión mixta &gt;2h Z2</span></div></div><span class="chev">v</span></div>
+<div class="day-b">
+<div class="meal"><div class="meal-t">4:30 AM - Pre sesión larga</div><div class="meal-h">Carga energética <span class="cal-tag">~250 kcal</span></div><div class="meal-d">1 tostada centeno + 1 cdta miel cruda + 1 plátano entero + café negro. Adicional: 300 ml agua tibia con pizca sal y limón.</div></div>
+<div class="meal"><div class="meal-t">5:00 - 7:15 AM</div><div class="meal-h">Sesión mixta &gt;2h Z2 (FC 108-126) <span class="cal-tag">~900 kcal quemadas</span></div><div class="meal-d">Trekking o bici ruta larga. Z2 estable todo el rato.</div></div>
+<div class="meal"><div class="meal-t">Durante sesión (60-90 min)</div><div class="meal-h">Snack de ruta <span class="cal-tag">~200 kcal</span></div><div class="meal-d">1 manzana + 2 cdas pasas + 1 plátano pequeño. 600-800 ml agua/hora con pizca sal.</div></div>
+<div class="meal"><div class="meal-t">8:00 AM - Desayuno POST sesión larga</div><div class="meal-h">Bowl potente post-ruta <span class="cal-tag">650 kcal</span></div><div class="meal-d">1 taza quinua cocida con pollo desmenuzado 150 g + verduras salteadas + ½ aguacate + 1 cda aceite oliva + 1 vaso agua de coco natural.</div></div>
+<div class="meal"><div class="meal-t">10:30 AM</div><div class="meal-h">Snack ligero <span class="cal-tag">150 kcal</span></div><div class="meal-d">Yogurt griego con ½ taza fresas + 1 cdta chía.</div></div>
+<div class="meal"><div class="meal-t">14:00 PM - Almuerzo</div><div class="meal-h">Tilapia al vapor + arroz integral <span class="cal-tag">580 kcal</span></div><div class="meal-d">Tilapia al vapor 180 g + ½ taza arroz integral + ensalada grande + verduras asadas + aceite oliva + limón.</div></div>
+<div class="meal"><div class="meal-t">16:30 PM</div><div class="meal-h">Merienda <span class="cal-tag">130 kcal</span></div><div class="meal-d">1 manzana verde + 1 cdta mantequilla de maní.</div></div>
+<div class="meal"><div class="meal-t">19:30 PM - Cena ligera</div><div class="meal-h">Ensalada + sardinas (omega-3) <span class="cal-tag">350 kcal</span></div><div class="meal-d">Ensalada grande mixta + 1 lata sardinas en agua + limón + aceite oliva + 1 tostada centeno pequeña.</div></div>
+<div class="box box-t" style="margin-top:10px"><strong>Total sábado: ~2.430 kcal - ~900 quemadas = ~1.530 kcal netas</strong></div>
+</div></div>
+
+<div class="day" onclick="this.classList.toggle('open')"><div class="day-h"><div class="day-l"><div class="day-n">Domingo</div><div><span class="badge b-cardio">Sesión Z3 1.5h</span><span class="badge b-rest" style="margin-left:5px">Recuperación</span></div></div><span class="chev">v</span></div>
+<div class="day-b">
+<div class="meal"><div class="meal-t">5:30 AM (o 6:00 AM)</div><div class="meal-h">Pre sesión Z3 <span class="cal-tag">~200 kcal</span></div><div class="meal-d">1 tostada centeno con miel + ½ plátano + 1 cdta mantequilla de maní + café negro. Esperar 30 min para empezar.</div></div>
+<div class="meal"><div class="meal-t">6:00 - 7:30 AM</div><div class="meal-h">Sesión Z3 1.5h (FC 126-144) <span class="cal-tag">~600 kcal quemadas</span></div><div class="meal-d">Carrera o bici a ritmo tempo. Agua + pizca sal durante toda la sesión.</div></div>
+<div class="meal"><div class="meal-t">8:30 AM - Desayuno POST Z3</div><div class="meal-h">Brunch andino completo <span class="cal-tag">550 kcal</span></div><div class="meal-d">Tortilla de 3 huevos + 2 lonjas pavo + ½ aguacate + espinaca salteada + 1 tostada centeno con miel.</div></div>
+<div class="meal"><div class="meal-t">11:00 AM</div><div class="meal-h">Frutos secos + fruta <span class="cal-tag">180 kcal</span></div><div class="meal-d">1 pera + 8 nueces + 1 cdta linaza.</div></div>
+<div class="meal"><div class="meal-t">14:00 PM - Almuerzo familiar</div><div class="meal-h">Lentejas + pollo <span class="cal-tag">680 kcal</span></div><div class="meal-d">Sopa casera de lentejas con verduras + 150 g pollo al horno con paprika + ½ taza arroz integral + ensalada completa.</div></div>
+<div class="meal"><div class="meal-t">17:00 PM</div><div class="meal-h">Snack energético <span class="cal-tag">150 kcal</span></div><div class="meal-d">Yogurt griego natural con canela y nueces picadas.</div></div>
+<div class="meal"><div class="meal-t">20:00 PM - Cena ligera</div><div class="meal-h">Crema de zapallo + proteína <span class="cal-tag">340 kcal</span></div><div class="meal-d">Crema de zapallo casera con jengibre + 1 tostada integral + 100 g pollo desmenuzado o queso cottage + infusión de manzanilla.</div></div>
+<div class="box box-t" style="margin-top:10px"><strong>Total domingo: ~2.100 kcal - ~600 quemadas = ~1.500 kcal netas</strong></div>
+<div class="box box-b" style="margin-top:10px"><strong>Domingo de batch cooking:</strong> cocinar la base de la semana: 2 tazas de quinua, 1 olla de lentejas, 6 pechugas de pollo al horno, lavar/cortar verduras, hacer hummus casero.</div>
+</div></div>
+
+<div class="card"><div class="card-t">Resumen Rápido por Tiempo de Comida</div>
+<table class="lab"><thead><tr><th>Hora</th><th>Qué comer</th><th>Kcal aprox.</th></tr></thead><tbody>
+<tr><td>4:30 AM</td><td>Pre cardio ligero (plátano + mantequilla maní)</td><td>100-250</td></tr>
+<tr><td>Post cardio (30-45 min)</td><td>Desayuno fuerte con proteína + carb complejo</td><td>430-650</td></tr>
+<tr><td>10:30 AM</td><td>Frutos secos + fruta fresca</td><td>150-200</td></tr>
+<tr><td>13:30 PM</td><td>Almuerzo completo (verduras + proteína + carb)</td><td>550-680</td></tr>
+<tr><td>17:00 PM (L/Mié/V)</td><td>Snack pre-fuerza (yogurt + granola o tostada + maní)</td><td>180-250</td></tr>
+<tr><td>Post fuerza (L/Mié/V) - 19:30</td><td>Cena alta en proteína + carb moderado + verduras</td><td>550-620</td></tr>
+<tr><td>Cena sin fuerza - 19:30/20:00</td><td>Cena ligera, proteína moderada, verduras abundantes</td><td>300-380</td></tr>
+</tbody></table>
+</div>
+
+<div class="callout"><div class="callout-i">!</div><div class="callout-t"><strong>Recordatorio diabetes + altitud:</strong> mide glucosa antes del cardio los primeros 15 días. Lleva dextrosa/caramelos por si hipoglucemia. NO entrenar en ayunas TOTAL (siempre toma algo a las 4:30). NO entrenar con glucosa &gt; 250 mg/dL.</div></div>
+</div>
+
+<div class="page" id="page-nutri">
+<div class="hero"><h2>4. Guía Nutricional - IESS Sangolquí</h2><p>Basada en las recomendaciones del Departamento de Nutrición y Dietética del Hospital del Día IESS Sangolquí para <strong>Sr. Caizaluisa Villamarin Jose Segundo</strong>. Tu nutricionista te entregó estos lineamientos junto con tu menú semanal base.</p></div>
+
+<div class="card"><div class="card-t">Recomendaciones IESS</div>
+<ul class="plain">
+<li><strong>Hojas de stevia</strong> para endulzar (en lugar de azúcar).</li>
+<li><strong>Tener horarios fijos</strong> de comida.</li>
+<li><strong>3-4 porciones de fruta</strong> y <strong>5-6 porciones de verduras</strong> al día.</li>
+<li><strong>Última comida 2-3 horas antes</strong> de dormir.</li>
+<li><strong>Evitar fritos.</strong></li>
+<li><strong>Masticar bien la comida.</strong></li>
+<li><strong>No TV ni celulares</strong> al comer.</li>
+<li><strong>Actividad física 30-60 min/día</strong> (ya cumplido).</li>
+<li><strong>Carne de res:</strong> limitar 1 vez/semana.</li>
+<li><strong>Cerdo y mariscos:</strong> cada 15 días.</li>
+</ul>
+</div>
+
+<div class="card"><div class="card-t">Sustituciones recomendadas</div>
+<table class="lab"><thead><tr><th>En lugar de</th><th>Usa</th></tr></thead><tbody>
+<tr><td>Mantequilla</td><td>Aguacate</td></tr>
+<tr><td>Sour cream / crema agria</td><td>Yogurt griego</td></tr>
+<tr><td>Soda / refresco</td><td>Agua</td></tr>
+<tr><td>Crutones</td><td>Nueces</td></tr>
+</tbody></table>
+</div>
+
+<div class="card"><div class="card-t">Cómo armar una ensalada completa (regla IESS)</div>
+<ol style="padding-left:24px;font-size:15px;color:var(--text2);line-height:1.75">
+<li><strong>Base verde:</strong> lechuga, espinacas, acelgas, berros.</li>
+<li><strong>Verduras o frutas:</strong> tomate, zanahoria, espinaca.</li>
+<li><strong>Proteína animal baja en grasa:</strong> pollo, pescado, huevo.</li>
+<li><strong>20 g de semillas o frutos secos:</strong> nueces, almendras, chía, linaza, girasol.</li>
+<li><strong>Aderezo bajo en grasa y sodio:</strong> vinagreta, aceite de oliva o limón.</li>
+</ol>
+</div>
+
+<div class="card"><div class="card-t">Guía Alimentaria - Porciones estándar IESS</div>
+<table class="ft"><thead><tr><th>Grupo</th><th>Alimentos</th><th>Porción</th></tr></thead><tbody>
+<tr><td><strong>Lácteos</strong> (moderado)</td><td>Leche descremada/semidescremada, yogurt natural, queso fresco o ricota</td><td>200ml / 150ml / 30g</td></tr>
+<tr><td><strong>Cereales</strong> (moderado)</td><td>Arroz, choclo, quinua, hojuelas de avena, linaza molida, pan integral/agua, rosquilla de agua. <em>NO trigo/cebada/centeno (1 mes)</em></td><td>150g arroz, 1 und pan</td></tr>
+<tr><td><strong>Tubérculos</strong></td><td>Camote, yuca, oca, zanahoria blanca, melloco, papa</td><td>½ tz / 1 papa grande</td></tr>
+<tr><td><strong>Cárnicos y huevo</strong></td><td>Pollo, pescado 90g, carnes rojas sin piel/grasa (limitadas). Huevo. <em>NO fritos</em></td><td>90g porción</td></tr>
+<tr><td><strong>Leguminosas</strong></td><td>Arveja, fréjol, haba, chochos</td><td>½ tz</td></tr>
+<tr><td><strong>Verduras (no remolacha)</strong></td><td>Acelga, brócoli, vainita, apio, berro, espinaca, cebolla, col, coliflor, lechuga, zanahoria, zapallo, tomate, rábano, pimiento, pepinillo, zuquini</td><td>½ tz vapor / 1 tz cruda</td></tr>
+<tr><td><strong>Frutas</strong></td><td><em>1x/semana (alto azúcar):</em> uvas, plátano, manzana roja, chirimoya, guanábana, melón, sandía. <em>Diarias:</em> mandarina, pera, naranja, pepino, kiwi, manzana verde, papaya, piña, frutilla, guayaba</td><td>3 peq / 1 und / 1 tz</td></tr>
+<tr><td><strong>Grasas</strong></td><td>Aceite (girasol/oliva/canola), nueces, almendras, aceitunas, aguacate</td><td>1 cda peq / 4-6 und / ¼ aguacate</td></tr>
+<tr><td><strong>Sal</strong></td><td>Sal o sal rosada</td><td>3-5 g/día</td></tr>
+<tr><td><strong>Agua</strong></td><td>-</td><td>6-8 vasos/día (mínimo 3L en altitud)</td></tr>
+</tbody></table>
+
+<div class="box box-r" style="margin-top:10px"><strong>ALIMENTOS LIMITADOS:</strong> salchicha, salami, jamón, mortadela, pastel, concha, camarón, calamar, cangrejo. Pastas, fideo. Gaseosas, jugos industrializados, bebidas energizantes, caramelos, chocolate, mermelada, galletas rellenas, pasteles, helados, flanes, leche condensada, snacks, panela, miel.</div>
+</div>
+
+<div class="card"><div class="card-t">Tu Jugo del Nutricionista IESS (sin toronja)</div>
+<div class="box box-g"><strong>Por qué no lleva toronja:</strong> bloquea la enzima CYP3A4 del hígado, lo que AUMENTA los niveles de fármacos para colesterol (estatinas) y triglicéridos (fibratos) en sangre, pudiendo causar toxicidad. Por eso tu nutricionista te dio esta alternativa.</div>
+<ul class="plain" style="margin-top:14px">
+<li><strong>Ingredientes (1 vaso 300 ml):</strong></li>
+<ul style="margin-top:4px">
+<li>300 ml de agua</li>
+<li>15 frutos secos mixtos (nueces, almendras, maní)</li>
+<li>3 cucharadas de avena en hojuelas</li>
+<li>2 sobres de gelatina sin sabor (sin azúcar)</li>
+</ul>
+<li><strong>Preparación:</strong> licuar todo 60 segundos. Tomar inmediatamente.</li>
+<li><strong>Cuándo:</strong> 1 vez al día, en ayunas o 30 min antes del almuerzo.</li>
+<li><strong>Beneficios:</strong> proteína de la gelatina + fibra de la avena + grasas saludables de los frutos secos. Aporta saciedad, estabiliza glucosa y NO interfiere con tu medicación.</li>
+</ul>
+<div class="box box-t" style="margin-top:10px"><strong>Tip:</strong> prepara la mezcla seca (frutos + avena + gelatina) en un frasco de vidrio. Cada mañana agregas 300 ml de agua y licúas. Así tienes el jugo listo en 1 minuto.</div>
+</div>
+
+<div class="card"><div class="card-t">Tips IESS para no comer por ansiedad</div>
+<ol style="padding-left:24px;font-size:14.5px;color:var(--text2);line-height:1.75">
+<li>Respetar los horarios alimenticios.</li>
+<li>Evitar la cafeína (después de las 14:00).</li>
+<li>Mantenerse hidratado.</li>
+<li>Caminar o mantener actividad física.</li>
+<li>Evitar hacer otras actividades mientras comes (tele retrasa la saciedad).</li>
+<li>Realizar de 4 a 5 comidas balanceadas diarias.</li>
+<li>Incorporar frutas o vegetales en TODAS las comidas.</li>
+<li>Consumir linaza en el yogurt.</li>
+<li>Planificar el menú semanal, sobre todo las cenas.</li>
+<li>No excederse en la cena, consumir alimentos ligeros.</li>
+</ol>
+</div>
+
+<div class="card"><div class="card-t">Hábitos diarios que mejoran tu vida (regla de 10)</div>
+<table class="lab"><thead><tr><th>Hábito</th><th>Meta</th></tr></thead><tbody>
+<tr><td>1 hora de ejercicio</td><td>Diario</td></tr>
+<tr><td>2-3 litros de agua</td><td>Diario (3L mínimo en altitud)</td></tr>
+<tr><td>3-4 porciones de fruta</td><td>Diario</td></tr>
+<tr><td>5-6 porciones de verdura</td><td>Diario</td></tr>
+<tr><td>5 comidas balanceadas</td><td>No saltarse</td></tr>
+<tr><td>7-8 horas de sueño</td><td>Mejora sensibilidad insulina</td></tr>
+<tr><td>10 minutos de respiración</td><td>Reduce cortisol</td></tr>
+</tbody></table>
+<div class="box box-g" style="margin-top:10px"><strong>"El éxito es la suma de pequeños esfuerzos que se repiten cada día."</strong> - Frase del manual IESS Sangolquí.</div>
+</div>
+</div>
+
+<div class="page" id="page-compras">
+<div class="hero"><h2>5. Lista de Compras Semanal</h2><p>Lista base de alimentos organizada por categoría. Las cantidades son orientativas para una persona y se ajustan según tu apetito y resultados semanales.</p></div>
+
+<div class="card"><div class="card-t">Proteínas</div>
+<table class="ft"><thead><tr><th>Producto</th><th>Cantidad/semana</th></tr></thead><tbody>
+<tr class="hl"><td>Pechuga de pollo</td><td>1,0 kg</td></tr>
+<tr><td>Trucha fresca andina</td><td>500 g</td></tr>
+<tr><td>Tilapia o pescado blanco</td><td>500 g</td></tr>
+<tr><td>Huevos</td><td>2 docenas</td></tr>
+<tr><td>Atún en lata (agua)</td><td>3 latas</td></tr>
+<tr><td>Yogurt griego natural sin azúcar</td><td>1 L</td></tr>
+<tr><td>Queso fresco bajo en grasa</td><td>500 g</td></tr>
+<tr><td>Carne magra de res</td><td>500 g</td></tr>
+<tr><td>Tofu o pavo</td><td>300 g</td></tr>
+</tbody></table>
+</div>
+
+<div class="card"><div class="card-t">Vegetales frescos</div>
+<ul class="plain">
+<li>Brócoli, coliflor (500 g)</li>
+<li>Espinaca, acelga (500 g)</li>
+<li>Lechuga, rúcula (1 atado)</li>
+<li>Tomate, pepino (1 kg)</li>
+<li>Zanahoria, betabel (1 kg)</li>
+<li>Zapallo, calabacín (1 unidad)</li>
+<li>Champiñones (250 g)</li>
+<li>Apio, cilantro, perejil, ajo</li>
+<li>Pimentón</li>
+</ul>
+</div>
+
+<div class="card"><div class="card-t">Frutas</div>
+<ul class="plain">
+<li>Manzanas verdes (4 unidades)</li>
+<li>Peras (3 unidades)</li>
+<li>Plátanos (4 unidades)</li>
+<li>Fresas / mortiño (250 g)</li>
+<li>Papaya (½ unidad grande)</li>
+<li>Naranjas (4 unidades)</li>
+<li>Mandarinas (3 unidades)</li>
+<li>Aguacates (3 unidades)</li>
+<li>Limones (6 unidades) - esenciales para agua tibia matinal</li>
+</ul>
+</div>
+
+<div class="card"><div class="card-t">Carbohidratos complejos</div>
+<table class="ft"><thead><tr><th>Producto</th><th>Cantidad/semana</th><th>Beneficio</th></tr></thead><tbody>
+<tr><td>Quinua</td><td>500 g</td><td>IG bajo, proteína completa</td></tr>
+<tr><td>Avena integral</td><td>500 g</td><td>Fibra soluble</td></tr>
+<tr><td>Arroz integral</td><td>1 kg</td><td>Mejor que blanco</td></tr>
+<tr><td>Lentejas</td><td>500 g</td><td>Hierro + proteína</td></tr>
+<tr><td>Garbanzos</td><td>500 g</td><td>Fibra + saciedad</td></tr>
+<tr><td>Chocho desamargado</td><td>1 kg</td><td>Superalimento andino</td></tr>
+<tr><td>Papa nativa</td><td>1 kg</td><td>Menor IG + antioxidantes</td></tr>
+<tr><td>Camote</td><td>1 kg</td><td>IG 48, beta-caroteno</td></tr>
+</tbody></table>
+</div>
+
+<div class="card"><div class="card-t">Grasas saludables</div>
+<table class="ft"><thead><tr><th>Producto</th><th>Cantidad/semana</th><th>Beneficio</th></tr></thead><tbody>
+<tr><td>Aceite oliva extra virgen</td><td>500 ml</td><td>Antiinflamatorio</td></tr>
+<tr><td>Mantequilla de maní natural</td><td>1 frasco</td><td>Sin azúcar</td></tr>
+<tr><td>Almendras crudas</td><td>250 g</td><td>Vitamina E, Mg</td></tr>
+<tr><td>Nueces</td><td>200 g</td><td>Omega-3 vegetal</td></tr>
+<tr><td>Semillas de chía</td><td>200 g</td><td>Fibra + omega-3</td></tr>
+<tr><td>Linaza molida</td><td>200 g</td><td>Lignanos prostáticos</td></tr>
+</tbody></table>
+</div>
+
+<div class="card"><div class="card-t">Otros esenciales</div>
+<ul class="plain">
+<li>Vinagre de manzana</li>
+<li>Canela de Ceylan</li>
+<li>Stevia natural</li>
+<li>Cacao puro &gt; 85%</li>
+<li>Té verde / manzanilla</li>
+<li>Hummus listo</li>
+<li>Gelatina sin sabor (2 sobres/semana para el jugo)</li>
+</ul>
+</div>
+
+<div class="callout"><div class="callout-i">i</div><div class="callout-t"><strong>Nota:</strong> las cantidades son una base flexible. Si una semana comes más, ajusta al alza. Si te sobran lentejas, reduce la siguiente. Lo importante es mantener la variedad y calidad, no el conteo exacto.</div></div>
+</div>
+
+<div class="page" id="page-suple">
+<div class="d-h"><h2>6. Suplementos - Pendiente decisión médica</h2><p>Tu médico AÚN NO te ha indicado qué suplementos tomar. Por seguridad, esta pestaña está en blanco hasta que el médico tratante (internista, urólogo o endocrinólogo) te recete lo apropiado para tu caso.</p></div>
+
+<div class="callout"><div class="callout-i">!</div><div class="callout-t"><strong>Importante:</strong> NO compres ni tomes suplementos por tu cuenta. La mayoría pueden:</div>
+<ul style="margin-top:6px;padding-left:24px;font-size:14px;color:var(--yellow-t);line-height:1.6">
+<li>Interactuar con fármacos que el médico te recete (metformina, tamsulosina, dutasteride, estatinas, fibratos)</li>
+<li>Causar hipoglucemia severa (especialmente berberina + metformina)</li>
+<li>Afectar tu próstata o retención vesical</li>
+<li>Tener variabilidad de calidad sin supervisión médica</li>
+<li>Ser innecesarios si tu alimentación ya cubre esos nutrientes</li>
+</ul>
+</div>
+
+<div class="card"><div class="card-t">Qué preguntarle a tu médico en tu próxima cita</div>
+<ul class="plain">
+<li><strong>Necesito vitamina D?</strong> Pide que te midan 25-OH-vitamina D en sangre. Si sale bajo (< 30 ng/mL), es el único suplemento que la mayoría de médicos aceptan universalmente.</li>
+<li><strong>Omega-3?</strong> Pregunta si con tu nivel de triglicéridos (201 mg/dL) es suficiente con comer pescado 2-3 veces/semana o si necesitas suplemento.</li>
+<li><strong>Magnesio?</strong> Si tienes calambres, insomnio o estrés, pregúntale específicamente.</li>
+<li><strong>Berberina?</strong> NO preguntes por ella directamente - algunos médicos la ven con desconfianza. Si te receta metformina, ese es el camino estándar.</li>
+<li><strong>Saw palmetto / pygeum?</strong> Pregúntale a tu URÓLOGO, no al internista. La evidencia es débil pero algunos urólogos lo toleran como complemento.</li>
+<li><strong>Canela, cromo, vinagre de sidra de manzana?</strong> NO preguntes - son alimentos, no suplementos. Ya los consumes naturalmente en tu dieta.</li>
+</ul>
+</div>
+
+<div class="card"><div class="card-t">Lo que SÍ puedes anotar aquí (cuando te los recete)</div>
+<div class="tracker">
+<div class="tk" style="grid-column:span 2"><div class="tk-l">Nombre del suplemento</div><input type="text" id="sup-nombre" placeholder="Ej: Vitamina D3"></div>
+<div class="tk"><div class="tk-l">Dosis</div><input type="text" id="sup-dosis" placeholder="Ej: 4000 UI/día"></div>
+<div class="tk"><div class="tk-l">Frecuencia</div><input type="text" id="sup-frecuencia" placeholder="Ej: 1 vez al día"></div>
+<div class="tk"><div class="tk-l">Cuándo</div><input type="text" id="sup-cuando" placeholder="Ej: con desayuno"></div>
+<div class="tk"><div class="tk-l">Para qué</div><input type="text" id="sup-paraque" placeholder="Ej: déficit vit D"></div>
+<div class="tk"><div class="tk-l">Quién lo recetó</div><input type="text" id="sup-doctor" placeholder="Ej: Dr. Pérez (internista)"></div>
+</div>
+<div style="margin-top:14px">
+<div class="tk-l" style="font-size:13px;color:var(--text3);text-transform:uppercase;font-weight:800;letter-spacing:.06em;margin-bottom:8px">Notas adicionales</div>
+<textarea id="sup-notas" placeholder="Reacciones, efectos, cuándo dejar de tomarlo, etc." style="width:100%;min-height:80px;padding:11px;border:2px solid var(--border);border-radius:10px;font-family:inherit;font-size:14px;color:var(--text);resize:vertical;outline:none"></textarea>
+</div>
+<button style="width:100%;padding:12px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-weight:800;font-size:14px;margin-top:12px;cursor:pointer" onclick="addSup()">+ Añadir suplemento a mi lista</button>
+</div>
+
+<div class="card"><div class="card-t">Mis Suplementos Recetados (lista)</div>
+<div id="sup-lista"></div>
+</div>
+
+<div class="card"><div class="card-t">Estado actual</div>
+<table class="lab"><thead><tr><th>Categoría</th><th>Estado</th></tr></thead><tbody>
+<tr><td><strong>Medicamentos recetados</strong></td><td class="warn">Pendiente cita con internista/urólogo</td></tr>
+<tr><td><strong>Suplementos recomendados</strong></td><td class="warn">Aún sin indicación médica</td></tr>
+<tr><td><strong>Vitamina D sérica (25-OH)</strong></td><td>Pendiente pedir análisis</td></tr>
+<tr><td><strong>PSA libre / total</strong></td><td>Pendiente pedir análisis</td></tr>
+<tr><td><strong>HbA1c confirmatoria</strong></td><td>Pendiente pedir análisis</td></tr>
+</tbody></table>
+<div class="box box-b" style="margin-top:10px"><strong>Hasta que tu médico diga lo contrario:</strong> come bien, hidrátate, entrena, duerme 7h. La comida real es el mejor suplemento.</div>
+</div>
+
+<div class="card"><div class="card-t">Recomendaciones IESS aplicables mientras tanto</div>
+<ul class="plain">
+<li><strong>Linaza en el yogurt</strong> (tu nutricionista IESS): 1 cdta de linaza molida en el yogurt natural del desayuno. Aporta omega-3 vegetal + fibra + lignanos (buenos para próstata).</li>
+<li><strong>Frutos secos 4-6 unidades</strong> por comida según tu guía alimentaria (nueces, almendras).</li>
+<li><strong>¼ de aguacate</strong> por comida (en lugar de mantequilla).</li>
+<li><strong>20 g de semillas o frutos secos</strong> en ensaladas (chía, linaza, girasol, nueces picadas).</li>
+<li><strong>Yogurt griego</strong> 150 ml al día (probióticos + calcio + proteína).</li>
+<li><strong>Pescado 2-3 veces por semana</strong> (trucha, sardinas, salmón).</li>
+<li><strong>Frutos rojos</strong> (mora, mortiño, frutilla) - antioxidantes antiinflamatorios.</li>
+</ul>
+</div>
+</div>
+
+<div class="page" id="page-alarma">
+<div class="d-h"><h2>7. Signos de Alarma - Cuándo ir a Urgencias</h2><p>Diabetes + HPB + retención severa + altitud requieren vigilancia activa. Si tienes CUALQUIERA de estos signos, NO esperes a la cita programada.</p></div>
+
+<div class="card"><div class="card-t">Urgencias Urológicas (inmediato)</div>
+<ul class="plain">
+<li><strong>Imposibilidad total para orinar</strong> (globo vesical - dolor supra-púbico intenso). Servicio de urgencias con sonda vesical.</li>
+<li><strong>Sangre en la orina</strong> (orina roja/rosada, coágulos). Urólogo de urgencias.</li>
+<li><strong>Fiebre + escalofríos + ardor al orinar</strong> (prostatitis aguda). Antibiótico IV.</li>
+<li><strong>Dolor lumbar intenso unilateral</strong> (sospecha pielonefritis).</li>
+</ul>
+</div>
+
+<div class="card"><div class="card-t">Urgencias Metabólicas / Diabetes</div>
+<ul class="plain">
+<li><strong>Glucemia &gt; 300 mg/dL</strong> con sed intensa + orina abundante: hiperglucemia. Urgencias.</li>
+<li><strong>Glucemia &lt; 70 mg/dL</strong> con temblor, sudoración, visión borrosa: hipoglucemia. Jugo de naranja, luego medir.</li>
+<li><strong>Hipoglucemia severa</strong> (confusión, convulsión): glucagón IM + urgencias.</li>
+<li><strong>Cetosis / aliento frutal + náuseas + vómito</strong>: complicación diabética.</li>
+<li><strong>Dolor torácico + disnea</strong>: descartar evento cardiovascular.</li>
+</ul>
+</div>
+
+<div class="card"><div class="card-t">Signos de Alerta Prostática (consulta prioritaria)</div>
+<ul class="plain">
+<li>Chorro cada vez más débil a pesar de medicación.</li>
+<li>Nocturia &gt; 3 veces manteniendo hábitos.</li>
+<li>Sangre en semen.</li>
+<li>PSA subiendo &gt; 0,4 ng/mL/año.</li>
+<li>Dolor pélvico crónico (sospecha prostatitis).</li>
+</ul>
+</div>
+
+<div class="card"><div class="card-t">Síntomas Agudos de Altitud</div>
+<ul class="plain">
+<li><strong>Mal agudo de montaña:</strong> cefalea + insomnio + náuseas + fatiga extrema - bajar a menor altitud.</li>
+<li><strong>Edema pulmonar de altura:</strong> disnea reposo + tos + esputo rosado - bajada urgente + cámara hiperbárica.</li>
+<li><strong>Edema cerebral de altura:</strong> confusión + ataxia - urgencia vital.</li>
+</ul>
+</div>
+
+<div class="card"><div class="card-t">Contactos Útiles - Machachi / Sangolquí</div>
+<ul class="plain">
+<li><strong>Emergencias ECU 911</strong> - 911</li>
+<li><strong>Hospital Básico Machachi</strong></li>
+<li><strong>Hospital de Sangolquí (IESS)</strong></li>
+<li><strong>Clínica privada:</strong> Hospital Vozandes Quito o Axxis Hospital</li>
+<li><strong>Farmacia de turno Machachi</strong></li>
+<li><strong>Tu médico internista:</strong> ________________</li>
+<li><strong>Tu urólogo:</strong> ________________</li>
+</ul>
+</div>
+
+<div class="callout"><div class="callout-i">+</div><div class="callout-t"><strong>Ante duda SIEMPRE llama antes.</strong> Es preferible ir a urgencias por algo no grave que ignorar algo grave.</div></div>
+
+<div class="d-h"><h2>Mensaje Final</h2><p>José, tienes TODAS las herramientas para revertir tu situación metabólica y mejorar tu salud prostática. La ventana de oportunidad es AHORA, antes de que la diabetes se cronifique y la retención dañe riñón. Los próximos 90 días definen tu salud a 20 años vista. <strong>Confía en el proceso, mide el progreso y ajusta con tu equipo médico.</strong></p></div>
+</div>
+
+</div></div><script>
+/* === NAVEGACION === */
+document.querySelectorAll('.nav-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('page-'+b.dataset.page).classList.add('active');
+    window.scrollTo(0,0);
+  });
+});
+
+/* === TRACKER SEMANAL (Progreso) === */
+const SK='plan_jose_semanas_v1';
+const HAB_KEY='plan_jose_habitos_v1';
+
+function getData(){try{return JSON.parse(localStorage.getItem(SK))||[]}catch(e){return[]}}
+function setData(d){localStorage.setItem(SK,JSON.stringify(d))}
+
+function getHabs(){try{return JSON.parse(localStorage.getItem(HAB_KEY))||[]}catch(e){return[]}}
+function setHabs(h){localStorage.setItem(HAB_KEY,JSON.stringify(h))}
+
+function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function saveWeek(){
+  const ids=['w-peso','w-cintura','w-cadera','w-glucosa','w-paSis','w-paDia','w-fc','w-pasos','w-sueno','w-agua','w-dieta','w-entreno'];
+  const w={fecha:new Date().toLocaleDateString('es-EC')};
+  ids.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) w[id.replace('w-','')]=el.value;
+  });
+  w.notas=(document.getElementById('w-notas')||{}).value||'';
+  w.habitos=getHabs();
+
+  const d=getData();
+  if(d.length>0&&confirm('Reemplazar última semana? (Di Cancelar para conservar la anterior)'))d[d.length-1]=w;
+  else d.push(w);
+  setData(d);
+  renderHist();
+  alert('Semana guardada (' + d.length + ' semanas registradas)');
+}
+
+function renderHist(){
+  const d=getData();
+  const el=document.getElementById('historial');
+  if(!el)return;
+  if(d.length===0){
+    el.innerHTML='<p style="font-size:14px;color:var(--text3);text-align:center;padding:18px">Aún no has guardado semanas. Llena el formulario arriba y presiona Guardar semana.</p>';
+    return;
+  }
+  let h='<div style="overflow-x:auto"><table class="lab"><thead><tr><th>Fecha</th><th>Peso</th><th>Cintura</th><th>Glucosa</th><th>PA</th><th>FC</th><th>Pasos</th><th>Sueno</th><th>Agua</th><th>Dieta</th><th>Entreno</th></tr></thead><tbody>';
+  d.slice().reverse().forEach(w=>{
+    h+='<tr><td>'+w.fecha+'</td><td>'+(w.peso||'-')+' kg</td><td>'+(w.cintura||'-')+'</td><td>'+(w.glucosa||'-')+'</td><td>'+(w.paSis||'-')+'/'+(w.paDia||'-')+'</td><td>'+(w.fc||'-')+'</td><td>'+(w.pasos||'-')+'</td><td>'+(w.sueno||'-')+'h</td><td>'+(w.agua||'-')+'L</td><td>'+(w.dieta||'-')+'/10</td><td>'+(w.entreno||'-')+'/10</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  const lastNotes=d.slice().reverse().find(w=>w.notas);
+  if(lastNotes){
+    h+='<div style="margin-top:10px;padding:10px 14px;background:var(--teal-l);border-radius:8px;font-size:13.5px;color:var(--teal-t);line-height:1.5"><strong>Última nota:</strong> '+escapeHtml(lastNotes.notas)+'</div>';
+  }
+  el.innerHTML=h;
+}
+
+function toggleHab(i){
+  const el=document.getElementById('hab-'+i);
+  if(el) el.classList.toggle('done');
+}
+
+function saveHabs(){
+  const days=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const arr=[];
+  for(let i=0;i<7;i++){
+    const el=document.getElementById('hab-'+i);
+    if(el && el.classList.contains('done')) arr.push(days[i]);
+  }
+  setHabs(arr);
+  alert('Hábitos del día guardados: ' + arr.length + '/7 días marcados');
+}
+
+function clearHabs(){
+  for(let i=0;i<7;i++){
+    const el=document.getElementById('hab-'+i);
+    if(el) el.classList.remove('done');
+  }
+}
+
+function exportData(){
+  const d=getData();
+  if(d.length===0){alert('No hay datos para exportar');return;}
+  const blob=new Blob([JSON.stringify({semanas:d,habitos:getHabs(),exportado:new Date().toISOString()},null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='plan-jose-datos-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportCSV(){
+  const d=getData();
+  if(d.length===0){alert('No hay datos para exportar');return;}
+  const headers=['Fecha','Peso','Cintura','Cadera','Glucosa','PA_sis','PA_dia','FC','Pasos','Sueno_h','Agua_L','Dieta','Entreno','Notas'];
+  let csv=headers.join(',')+'\n';
+  d.forEach(w=>{
+    csv+=[
+      w.fecha,w.peso,w.cintura,w.cadera,w.glucosa,w.paSis,w.paDia,w.fc,w.pasos,w.sueno,w.agua,w.dieta,w.entreno,
+      '"'+(w.notas||'').replace(/"/g,'""')+'"'
+    ].join(',')+'\n';
+  });
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='plan-jose-datos-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+renderHist();
+
+/* === SUPLEMENTOS === */
+const SUP_KEY='plan_jose_suplementos_v1';
+
+function getSup(){try{return JSON.parse(localStorage.getItem(SUP_KEY))||[]}catch(e){return[]}}
+function setSup(s){localStorage.setItem(SUP_KEY,JSON.stringify(s))}
+
+function addSup(){
+  const nombre=document.getElementById('sup-nombre').value.trim();
+  if(!nombre){alert('Ingresa al menos el nombre del suplemento');return;}
+  const item={
+    fecha:new Date().toLocaleDateString('es-EC'),
+    nombre,
+    dosis:(document.getElementById('sup-dosis')||{}).value||'',
+    frecuencia:(document.getElementById('sup-frecuencia')||{}).value||'',
+    cuando:(document.getElementById('sup-cuando')||{}).value||'',
+    paraque:(document.getElementById('sup-paraque')||{}).value||'',
+    doctor:(document.getElementById('sup-doctor')||{}).value||'',
+    notas:(document.getElementById('sup-notas')||{}).value||''
+  };
+  const list=getSup();
+  list.push(item);
+  setSup(list);
+  renderSup();
+  ['sup-nombre','sup-dosis','sup-frecuencia','sup-cuando','sup-paraque','sup-doctor','sup-notas'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  alert('Suplemento guardado.');
+}
+
+function renderSup(){
+  const list=getSup();
+  const el=document.getElementById('sup-lista');
+  if(!el) return;
+  if(list.length===0){
+    el.innerHTML='<div style="text-align:center;padding:18px;color:var(--text3);font-size:14px">Aún no tienes suplementos recetados.<br>Cuando tu médico te los indique, usa el formulario arriba para anotarlos aquí.</div>';
+    return;
+  }
+  let h='<div style="overflow-x:auto"><table class="lab"><thead><tr><th>Añadido</th><th>Suplemento</th><th>Dosis</th><th>Cuándo</th><th>Para qué</th><th>Doctor</th><th></th></tr></thead><tbody>';
+  list.slice().reverse().forEach((s,i)=>{
+    const realIdx=list.length-1-i;
+    h+='<tr><td>'+s.fecha+'</td><td><strong>'+escapeHtml(s.nombre)+'</strong></td><td>'+escapeHtml(s.dosis)+'</td><td>'+escapeHtml(s.cuando)+'</td><td>'+escapeHtml(s.paraque)+'</td><td>'+escapeHtml(s.doctor)+'</td><td><button onclick="delSup('+realIdx+')" style="background:var(--red-l);color:var(--red-t);border:none;border-radius:6px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer">X</button></td></tr>';
+    if(s.notas){
+      h+='<tr><td colspan="7" style="font-size:12px;color:var(--text2);background:var(--bg);padding:6px 12px;font-style:italic">Notas: '+escapeHtml(s.notas)+'</td></tr>';
+    }
+  });
+  h+='</tbody></table></div>';
+  el.innerHTML=h;
+}
+
+function delSup(i){
+  if(!confirm('Eliminar este suplemento?'))return;
+  const list=getSup();
+  list.splice(i,1);
+  setSup(list);
+  renderSup();
+}
+
+renderSup();
+
+/* === EDICION DE EJERCICIOS === */
+const EDIT_KEY='plan_jose_ejercicios_v1';
+let editMode=false;
+
+function getEditState(){try{return JSON.parse(localStorage.getItem(EDIT_KEY))||{}}catch(e){return{}}}
+function setEditState(s){localStorage.setItem(EDIT_KEY,JSON.stringify(s))}
+
+function makeEditable(card){
+  if(!card||card.dataset.editable==='1')return;
+  card.dataset.editable='1';
+  const icon=card.querySelector('.ex-icon');
+  const name=card.querySelector('.ex-name');
+  const detail=card.querySelector('.ex-detail');
+
+  const del=document.createElement('button');
+  del.className='ex-del';
+  del.textContent='×';
+  del.title='Eliminar ejercicio';
+  del.onclick=function(e){
+    e.stopPropagation();
+    if(!editMode)return;
+    if(confirm('Eliminar "'+((name?name.textContent:''))+'"?')){
+      card.remove();
+      saveAllGrids();
+    }
+  };
+  card.appendChild(del);
+
+  const flag=document.createElement('span');
+  flag.className='ex-edited-flag';
+  flag.textContent='editado';
+  card.appendChild(flag);
+
+  function toInput(el,cls){
+    if(!el)return;
+    const original=el.textContent;
+    const input=document.createElement('input');
+    input.type='text';
+    input.className='ex-input '+cls;
+    input.value=original;
+    input.readOnly=!editMode;
+    input.oninput=function(){el.textContent=input.value};
+    input.onblur=function(){
+      el.textContent=input.value||original;
+      if(editMode) saveAllGrids();
+    };
+    input.onfocus=function(){input.select()};
+    el.textContent='';
+    el.appendChild(input);
+    return input;
+  }
+
+  toInput(icon,'icon');
+  toInput(name,'name');
+  toInput(detail,'detail');
+}
+
+function saveAllGrids(){
+  if(!editMode)return;
+  const state={};
+  document.querySelectorAll('.ex-grid[data-grid]').forEach(grid=>{
+    const gid=grid.dataset.grid;
+    state[gid]=[];
+    grid.querySelectorAll('.ex-card').forEach((card,idx)=>{
+      const colorMatch=card.className.match(/ex-card\s+(\w)/);
+      const color=colorMatch?colorMatch[1]:'o';
+      state[gid].push({
+        i:idx,c:color,
+        icon:(card.querySelector('.ex-icon')||{}).textContent||'',
+        name:(card.querySelector('.ex-name')||{}).textContent||'',
+        detail:(card.querySelector('.ex-detail')||{}).textContent||''
+      });
+    });
+  });
+  setEditState(state);
+  const sv=document.getElementById('saveStatus');
+  if(sv){sv.textContent='Cambios guardados en este dispositivo';sv.className='save-status saved';setTimeout(()=>{sv.className='save-status'},1800);}
+}
+
+function restoreFromState(){
+  const state=getEditState();
+  if(!state||Object.keys(state).length===0)return false;
+  document.querySelectorAll('.ex-grid[data-grid]').forEach(grid=>{
+    const gid=grid.dataset.grid;
+    if(!state[gid])return;
+    grid.innerHTML='';
+    state[gid].forEach(ex=>{
+      const card=document.createElement('div');
+      card.className='ex-card '+(ex.c||'o');
+      card.innerHTML='<div class="ex-icon">'+escapeHtml(ex.icon||'')+'</div>'
+        +'<div class="ex-name">'+escapeHtml(ex.name||'')+'</div>'
+        +'<div class="ex-detail">'+escapeHtml(ex.detail||'')+'</div>';
+      grid.appendChild(card);
+      makeEditable(card);
+    });
+  });
+  return true;
+}
+
+function hydrateExercises(){
+  const restored=restoreFromState();
+  if(!restored){
+    document.querySelectorAll('.ex-grid[data-grid] .ex-card').forEach(card=>makeEditable(card));
+  } else {
+    document.querySelectorAll('.ex-grid[data-grid] .ex-card').forEach(card=>makeEditable(card));
+  }
+  document.querySelectorAll('.ex-input').forEach(i=>{i.readOnly=!editMode});
+}
+
+function toggleEditMode(){
+  editMode=!editMode;
+  document.body.classList.toggle('edit-mode',editMode);
+  const btn=document.getElementById('btnEditMode');
+  if(btn){
+    btn.textContent=editMode?'Modo edición activo':'Activar edición';
+    btn.classList.toggle('active',editMode);
+  }
+  hydrateExercises();
+}
+
+function resetExercises(){
+  if(!confirm('Restaurar el plan original de ejercicios? Tus ediciones se perderán.'))return;
+  localStorage.removeItem(EDIT_KEY);
+  location.reload();
+}
+
+function addExercise(btn){
+  const grid=btn.parentElement.querySelector('.ex-grid[data-grid]');
+  if(!grid)return;
+  if(!editMode){alert('Primero activa el modo edición.');return;}
+  const card=document.createElement('div');
+  card.className='ex-card t new-added';
+  card.innerHTML='<div class="ex-icon">NU</div><div class="ex-name">Nuevo ejercicio</div><div class="ex-detail">3 x 12</div>';
+  grid.appendChild(card);
+  makeEditable(card);
+  saveAllGrids();
+  const nameInput=card.querySelector('.ex-input.name');
+  if(nameInput){nameInput.focus();nameInput.select();}
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  hydrateExercises();
+  document.querySelectorAll('.ex-grid[data-grid]').forEach(grid=>{
+    if(grid.nextElementSibling&&grid.nextElementSibling.classList.contains('ex-add-bar'))return;
+    const bar=document.createElement('div');
+    bar.className='ex-add-bar';
+    bar.innerHTML='<button class="btn-add-ex" onclick="addExercise(this)">+ Añadir ejercicio</button>';
+    grid.parentElement.insertBefore(bar,grid.nextSibling);
+  });
+});
+
+/* === EXPANDIR DÍAS DEL MENU === */
+document.addEventListener('DOMContentLoaded',function(){
+  // Click handlers on .day are already in HTML via onclick
+});
+</script>
+</body>
+</html>
+
